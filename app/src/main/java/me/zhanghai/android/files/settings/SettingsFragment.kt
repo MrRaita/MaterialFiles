@@ -25,6 +25,7 @@ class SettingsFragment : Fragment() {
             .also { binding = it }
             .root
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 

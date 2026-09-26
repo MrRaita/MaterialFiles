@@ -236,6 +236,7 @@
     <string name="file_create_archive_type_7z">.7z</string>
     <string name="file_add_bookmark_success">Yer işareti eklendi</string>
     <string name="file_create_file_title">Yeni dosya</string>
+    <string name="file_create_extension">Uzantı seç</string>
     <string name="file_create_directory_title">Yeni klasör</string>
 
     <string name="file_list_title">Dosyalar</string>
@@ -470,7 +471,43 @@
     <string name="text_editor_save_success">Kaydedildi</string>
     <string name="text_editor_reload_message">Yeniden yüklemek istediğinizden emin misiniz? Bu belgedeki kaydedilmemiş değişiklikler kaybedilecek.</string>
     <string name="text_editor_encoding">Kodlama</string>
+    <string name="text_editor_unsaved_changes">Başka bir dosya açmadan önce mevcut dosyayı kaydet</string>
     <string name="text_editor_close_message">Bu belgedeki kaydedilmemiş değişiklikleri atmak istediğinizden emin misiniz?</string>
+    <string name="text_editor_search">Bul ve değiştir</string>
+    <string name="text_editor_search_hint">Bul</string>
+    <string name="text_editor_replace_hint">Şununla değiştir</string>
+    <string name="text_editor_match_case">Büyük/küçük harfe duyarlı</string>
+    <string name="text_editor_whole_word">Tam sözcük</string>
+    <string name="text_editor_regex">Düzenli ifade</string>
+    <string name="text_editor_previous">Önceki</string>
+    <string name="text_editor_next">Sonraki</string>
+    <string name="text_editor_replace">Değiştir</string>
+    <string name="text_editor_replace_all">Tümünü değiştir</string>
+    <string name="text_editor_undo">Geri al</string>
+    <string name="text_editor_redo">Yinele</string>
+    <string name="text_editor_settings">Düzenleyici ayarları</string>
+    <string name="text_editor_word_wrap">Satırları kaydır</string>
+    <string name="text_editor_line_numbers">Satır numaraları</string>
+    <string name="text_editor_sticky_scroll">Yapışkan kaydırma</string>
+    <string name="text_editor_font_size">Yazı boyutu</string>
+    <string name="text_editor_settings_title">Düzenleyici ayarları</string>
+    <string name="text_editor_search_error">Geçersiz düzenli ifade</string>
+    <string name="text_editor_line_numbers_auto">Otomatik</string>
+    <string name="text_editor_line_numbers_always">Her zaman açık</string>
+    <string name="text_editor_line_numbers_never">Her zaman kapalı</string>
+    <string name="text_editor_indent">Girintiyi artır</string>
+    <string name="text_editor_outdent">Girintiyi azalt</string>
+    <string name="text_editor_comment">Yoruma al / yorumu kaldır</string>
+    <string name="text_editor_symbols">Semboller</string>
+    <string name="text_editor_symbols_show">Sembolleri göster</string>
+    <string name="text_editor_symbols_hide">Sembolleri gizle</string>
+    <string name="text_editor_compare">Dosyayı karşılaştır</string>
+    <string name="text_editor_compare_apply">Uygula</string>
+    <string name="text_editor_compare_summary">%1$d eksik giriş, %2$d sıra değişikliği bulundu.</string>
+    <string name="text_editor_compare_repaired">%1$d hatalı kaynak adı düzeltildi.</string>
+    <string name="text_editor_compare_no_sync">Bu dosya türü için anahtar tabanlı eşitleme desteklenmiyor.</string>
+    <string name="text_editor_save_as">Farklı kaydet</string>
+
 
     <string name="ftp_server_title">FTP sunucusu</string>
     <string name="ftp_server_state_title">Durum</string>
@@ -490,6 +527,39 @@
     <string name="ftp_server_writable_title">Yazmaya izin ver</string>
     <string name="settings_title">Ayarlar</string>
     <string name="settings_interface_title">Arayüz</string>
+    <string name="settings_code_editor_title">Kod düzenleyici</string>
+    <string name="settings_code_editor_summary">Kod düzenleme ve sözdizimi vurgulama ayarları</string>
+    <string name="settings_editor_toolbar_title">Düzenleyici araç çubuğu</string>
+    <string name="settings_editor_toolbar_summary">Klavyenin üzerindeki işlemleri seç, etkinleştir ve sıralarını değiştir</string>
+    <string name="settings_editor_toolbar_reorder">Sıralamak için sürükle</string>
+    <string name="settings_text_editor_title">Metin düzenleyici</string>
+    <string name="settings_text_editor_summary">Metin düzenleyici ayarları</string>
+    <string name="settings_text_editor_syntax_highlighting_title">Sözdizimi vurgulama</string>
+    <string name="settings_text_editor_syntax_highlighting_summary">Dosya türüne göre kodu renklendir</string>
+    <string name="settings_text_editor_word_wrap_title">Satırları kaydır</string>
+    <string name="settings_text_editor_word_wrap_summary">Uzun satırları yatay kaydırmak yerine kaydır</string>
+    <string name="settings_text_editor_line_numbers_title">Satır numaraları</string>
+    <string name="settings_text_editor_line_numbers_auto">Otomatik</string>
+    <string name="settings_text_editor_line_numbers_on">Her zaman açık</string>
+    <string name="settings_text_editor_line_numbers_off">Her zaman kapalı</string>
+    <string name="settings_text_editor_sticky_scroll_title">Yapışkan kaydırma</string>
+    <string name="settings_text_editor_font_size_title">Yazı boyutu</string>
+    <string name="settings_text_editor_symbols_open_title">Sembol satırını varsayılan olarak aç</string>
+    <string name="settings_text_editor_symbols_open_summary">Düzenleyici açıldığında ek sembol satırını göster</string>
+    <string name="settings_text_editor_page_guide_title">Düz metin için A4 sayfa kılavuzu</string>
+    <string name="settings_text_editor_page_guide_summary">TXT, LOG, CSV ve TSV dosyalarında sayfa genişliği kılavuzunu göster</string>
+    <string-array name="settings_text_editor_line_numbers_entries">
+        <item>Otomatik</item>
+        <item>Her zaman açık</item>
+        <item>Her zaman kapalı</item>
+    </string-array>
+    <string-array name="settings_text_editor_font_size_entries">
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+    </string-array>
     <string name="settings_theme_color_title">Tema rengi</string>
     <string name="settings_theme_color_summary">Uygulamada en sık görünen renk</string>
     <string name="settings_material_design_3_title">Materyal Tasarım 3</string>
@@ -546,4 +616,66 @@
     <string name="about_author_name_title">Hai Zhang</string>
     <string name="about_author_github_title">GitHub\'da takip edin</string>
     <string name="about_author_twitter_title">Twitter\'da takip edin</string>
+<string name="pdf_viewer_page_count">%1$d sayfa</string>
+    <string name="pdf_viewer_go_to_page">Sayfaya git</string>
+    <string name="pdf_viewer_page_number">Sayfa numarası</string>
+    <string name="pdf_viewer_night_mode">Gece modu</string>
+
+    <string name="image_editor_edit">Görseli düzenle</string>
+    <string name="image_editor_rotate_left">Sola döndür</string>
+    <string name="image_editor_rotate_right">Sağa döndür</string>
+    <string name="image_editor_flip_horizontal">Yatay çevir</string>
+    <string name="image_editor_flip_vertical">Dikey çevir</string>
+    <string name="image_editor_grayscale">Gri tonlama</string>
+    <string name="image_editor_save_copy">Düzenlenmiş kopyayı kaydet</string>
+    <string name="settings_editor_appearance_title">Düzenleyici görünümü</string>
+    <string name="settings_editor_appearance_summary">Tema, yazı tipi ve renkleri özelleştir</string>
+    <string name="settings_editor_theme_title">Renk teması</string>
+    <string name="settings_editor_font_family_title">Yazı tipi</string>
+    <string name="settings_editor_font_weight_title">Yazı kalınlığı</string>
+    <string name="settings_editor_font_ligatures_title">Kod ligatürleri</string>
+    <string name="settings_editor_font_ligatures_summary">Yaygın kod operatörlerinde birleşik karakterleri kullan</string>
+    <string name="settings_editor_syntax_colors_title">Sözdizimi renkleri</string>
+    <string name="settings_editor_ui_colors_title">Düzenleyici ve araç çubuğu renkleri</string>
+    <string name="settings_editor_color_background">Düzenleyici arka planı</string>
+    <string name="settings_editor_color_text">Normal metin</string>
+    <string name="settings_editor_color_comment">Yorumlar</string>
+    <string name="settings_editor_color_keyword">Anahtar kelimeler</string>
+    <string name="settings_editor_color_string">Dizeler</string>
+    <string name="settings_editor_color_number">Sayılar</string>
+    <string name="settings_editor_color_type">Türler ve sınıflar</string>
+    <string name="settings_editor_color_function">İşlevler</string>
+    <string name="settings_editor_color_variable">Değişkenler</string>
+    <string name="settings_editor_color_constant">Sabitler</string>
+    <string name="settings_editor_color_operator">Operatörler</string>
+    <string name="settings_editor_color_tag">Etiketler</string>
+    <string name="settings_editor_color_attribute">Öznitelikler</string>
+    <string name="settings_editor_color_punctuation">Noktalama</string>
+    <string name="settings_editor_color_current_line">Geçerli satır</string>
+    <string name="settings_editor_color_selection">Seçim</string>
+    <string name="settings_editor_color_gutter_background">Kenar boşluğu arka planı</string>
+    <string name="settings_editor_color_gutter_text">Satır numarası metni</string>
+    <string name="settings_editor_color_cursor">İmleç</string>
+    <string name="settings_editor_toolbar_background">Araç çubuğu arka planı</string>
+    <string name="settings_editor_toolbar_icon">Araç çubuğu simgesi</string>
+    <string name="settings_editor_appearance_reset">Görünümü sıfırla</string>
+    <string name="settings_editor_appearance_reset_summary">Varsayılan tema ve özel renkleri geri yükle</string>
+    <string name="editor_theme_github_dark">GitHub Koyu</string>
+    <string name="editor_theme_github_light">GitHub Açık</string>
+    <string name="editor_theme_dracula">Dracula</string>
+    <string name="editor_theme_one_dark">One Dark</string>
+    <string name="editor_theme_nord">Nord</string>
+    <string name="editor_theme_tokyo_night">Tokyo Night</string>
+    <string name="editor_theme_catppuccin_mocha">Catppuccin Mocha</string>
+    <string name="editor_theme_solarized_dark">Solarized Dark</string>
+    <string name="editor_theme_darcula">Darcula</string>
+    <string name="editor_theme_quiet_light">Quiet Light</string>
+    <string name="editor_font_system">Sistem sans-serif</string>
+    <string name="editor_font_monospace">Sistem monospace</string>
+    <string name="editor_font_serif">Serif</string>
+    <string name="editor_font_condensed">Dar sans-serif</string>
+    <string name="editor_font_weight_normal">Normal</string>
+    <string name="editor_font_weight_medium">Orta</string>
+    <string name="editor_font_weight_bold">Kalın</string>
+    <string name="settings_editor_color_theme_default">Tema varsayılanı</string>
 </resources>

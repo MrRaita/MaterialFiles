@@ -9,9 +9,12 @@ import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.IBinder
 import android.os.Parcel
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.Keep
+import androidx.annotation.RequiresApi
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.system.exitProcess
@@ -30,8 +33,11 @@ import rikka.shizuku.ShizukuApiConstants
 object ShizukuFileServiceLauncher {
     private val lock = Any()
 
-    fun isAvailable(): Boolean = Shizuku.pingBinder()
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.M)
+    fun isAvailable(): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Shizuku.pingBinder()
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @Throws(RemoteFileSystemException::class)
     fun launchService(): IRemoteFileService {
         synchronized(lock) {
@@ -135,23 +141,20 @@ object ShizukuFileServiceLauncher {
 }
 
 @Keep
+@RequiresApi(Build.VERSION_CODES.M)
 class ShizukuFileServiceInterface : RemoteFileServiceInterface() {
     init {
         RootFileService.main()
     }
 
-    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-        // Let super call data.enforceInterface() exactly once.
-        if (super.onTransact(code, data, reply, flags)) {
-            return true
-        }
-        return if (code == TRANSACTION_destroy) {
+    override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean =
+        if (code == TRANSACTION_destroy) {
+            data.enforceInterface(DESCRIPTOR)
             destroy()
             true
         } else {
-            false
+            super.onTransact(code, data, reply, flags)
         }
-    }
 
     private fun destroy() {
         exitProcess(0)

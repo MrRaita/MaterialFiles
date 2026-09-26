@@ -19,9 +19,47 @@
         tools:ignore="AlwaysShowAction" />
 
     <item
+        android:id="@+id/action_compare"
+        android:icon="@drawable/add_icon_control_normal_24dp"
+        android:orderInCategory="90"
+        android:title="@string/text_editor_compare"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_reload"
         android:orderInCategory="100"
         android:title="@string/reload"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="200"
+        android:title="@string/text_editor_search"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_undo"
+        android:orderInCategory="210"
+        android:title="@string/text_editor_undo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_redo"
+        android:orderInCategory="220"
+        android:title="@string/text_editor_redo"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_save_as"
+        android:orderInCategory="225"
+        android:title="@string/text_editor_save_as"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="230"
+        android:title="@string/text_editor_settings"
         app:showAsAction="never" />
 
     <item

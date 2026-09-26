@@ -1,0 +1,14 @@
+{
+  "name": "Smali",
+  "scopeName": "source.smali",
+  "patterns": [
+    { "name": "comment.line.number-sign.smali", "match": "#.*$" },
+    { "name": "keyword.other.directive.smali", "match": "\\.[A-Za-z_][A-Za-z0-9_-]*" },
+    { "name": "keyword.control.smali", "match": "\\b(if-[A-Za-z-]+|goto(?:/\\w+)?|return(?:-[A-Za-z]+)?|throw|catch|try_start|try_end)\\b" },
+    { "name": "support.function.instruction.smali", "match": "\\b(?:move(?:/\\w+)?|const(?:/\\w+)?|new-instance|invoke-[A-Za-z-]+|iget(?:-[A-Za-z]+)?|iput(?:-[A-Za-z]+)?|sget(?:-[A-Za-z]+)?|sput(?:-[A-Za-z]+)?|check-cast|instance-of|array-length|new-array|filled-new-array|aput(?:-[A-Za-z]+)?|aget(?:-[A-Za-z]+)?|monitor-[A-Za-z]+|cmp[A-Za-z0-9-]*|add-int|sub-int|mul-int|div-int|rem-int|and-int|or-int|xor-int|shl-int|shr-int|ushr-int)\\b" },
+    { "name": "storage.type.smali", "match": "L[A-Za-z0-9_/$]+;|[VZBSCIJFD]" },
+    { "name": "variable.other.register.smali", "match": "\\b[vp][0-9]+\\b" },
+    { "name": "string.quoted.double.smali", "match": "\"(?:\\\\.|[^\"])*\"" },
+    { "name": "constant.numeric.smali", "match": "\\b(?:0x[0-9A-Fa-f]+|-?[0-9]+)\\b" }
+  ]
+}

@@ -18,7 +18,7 @@
         android:background="?colorAppBarSurface"
         android:theme="?actionBarTheme"
         app:liftOnScroll="true"
-        app:liftOnScrollTargetViewId="@id/scrollView">
+        app:liftOnScrollTargetViewId="@id/textEdit">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -51,26 +51,33 @@
             android:visibility="gone"
             app:drawableTopCompat="@drawable/error_icon_240dp" />
 
-        <!-- TODO: Use a WebView for large amount of text. -->
-        <me.zhanghai.android.fastscroll.FastScrollNestedScrollView
-            android:id="@+id/scrollView"
+        <io.github.rosemoe.sora.widget.CodeEditor
+            android:id="@+id/textEdit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:fillViewport="true">
+            android:paddingStart="@dimen/screen_edge_margin"
+            android:paddingEnd="@dimen/screen_edge_margin"
+            android:paddingTop="8dp"
+            android:paddingBottom="56dp"
+            android:background="@null"
+            android:gravity="top"
+            android:importantForAutofill="no"
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="vertical|horizontal" />
 
-            <me.zhanghai.android.files.ui.ScrollingChildEditText
-                android:id="@+id/textEdit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/screen_edge_margin"
-                android:background="@null"
-                android:gravity="top"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                android:textAppearance="?textAppearanceListItemSecondary">
-                <requestFocus />
-            </me.zhanghai.android.files.ui.ScrollingChildEditText>
-        </me.zhanghai.android.fastscroll.FastScrollNestedScrollView>
+        <me.zhanghai.android.files.viewer.text.TextEditorPageGuideView
+            android:id="@+id/pageGuide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:focusable="false"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/editorToolbar"
+            layout="@layout/text_editor_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
     </me.zhanghai.android.files.ui.CoordinatorScrollingFrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

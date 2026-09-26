@@ -131,6 +131,8 @@ import me.zhanghai.android.files.util.valueCompat
 import me.zhanghai.android.files.util.viewModels
 import me.zhanghai.android.files.util.withChooser
 import me.zhanghai.android.files.viewer.image.ImageViewerActivity
+import me.zhanghai.android.files.viewer.pdf.PdfViewerActivity
+import me.zhanghai.android.files.viewer.text.TextEditorActivity
 
 class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.Listener,
     ConfirmReplaceFileDialogFragment.Listener, OpenApkDialogFragment.Listener,
@@ -1263,6 +1265,14 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
         if (path.isArchivePath) {
             FileJobService.open(path, mimeType, withChooser, requireContext())
         } else {
+            if (mimeType == MimeType.PDF && !withChooser) {
+                startActivitySafe(PdfViewerActivity::class.createIntent().apply { extraPath = path })
+                return
+            }
+            if (TextEditorActivity.shouldHandle(path, mimeType) && !withChooser) {
+                startActivitySafe(TextEditorActivity.createIntent(path, mimeType))
+                return
+            }
             val intent = path.fileProviderUri.createViewIntent(mimeType)
                 .addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                 .apply {
@@ -1272,8 +1282,12 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
                 .let {
                     if (withChooser) {
                         it.withChooser(
-                            EditFileActivity::class.createIntent()
-                                .putArgs(EditFileActivity.Args(path, mimeType)),
+                            if (TextEditorActivity.shouldHandle(path, mimeType)) {
+                                TextEditorActivity.createIntent(path, mimeType)
+                            } else {
+                                EditFileActivity::class.createIntent()
+                                    .putArgs(EditFileActivity.Args(path, mimeType))
+                            },
                             OpenFileAsDialogActivity::class.createIntent()
                                 .putArgs(OpenFileAsDialogFragment.Args(path))
                         )
@@ -1471,17 +1485,19 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
                 ShowRequestAllFilesAccessRationaleDialogFragment.show(this)
                 viewModel.isStorageAccessRequested = true
             }
-        } else if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-            PackageManager.PERMISSION_GRANTED
-        ) {
-            if (shouldShowRequestPermissionRationale(
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )) {
-                ShowRequestStoragePermissionRationaleDialogFragment.show(this)
-            } else {
-                requestStoragePermission()
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                if (shouldShowRequestPermissionRationale(
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )) {
+                    ShowRequestStoragePermissionRationaleDialogFragment.show(this)
+                } else {
+                    requestStoragePermission()
+                }
+                viewModel.isStorageAccessRequested = true
             }
-            viewModel.isStorageAccessRequested = true
         }
     }
 

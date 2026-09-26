@@ -6,7 +6,6 @@
 package me.zhanghai.android.files.viewer.text
 
 import android.content.Context
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import java8.nio.file.Path
@@ -59,6 +58,12 @@ class TextEditorViewModel(file: Path) : ViewModel() {
         }
     }
 
+    fun switchFile(file: Path) {
+        isTextChanged.value = false
+        encoding.value = StandardCharsets.UTF_8
+        _file.value = file
+    }
+
     fun reload() {
         viewModelScope.launch {
             loadJob?.cancel()?.also { loadJob = null }
@@ -77,8 +82,15 @@ class TextEditorViewModel(file: Path) : ViewModel() {
         try {
             val bytes = runInterruptible(Dispatchers.IO) {
                 val size = file.size()
-                if (size > MAX_FILE_SIZE) {
-                    throw IOException("File size $size is too large")
+                val maxFileSize = if (file.fileName.toString().lowercase().let {
+                        it.endsWith(".dex") || it.endsWith(".arsc") || it.endsWith(".axml")
+                    }) {
+                    MAX_BINARY_FILE_SIZE
+                } else {
+                    MAX_FILE_SIZE
+                }
+                if (size > maxFileSize) {
+                    throw IOException("File size $size is too large (maximum ${maxFileSize / 1024 / 1024} MiB)")
                 }
                 file.readAllBytes()
             }
@@ -93,6 +105,9 @@ class TextEditorViewModel(file: Path) : ViewModel() {
 
     val encoding = MutableStateFlow(StandardCharsets.UTF_8)
 
+    private val _isDecodedBinary = MutableStateFlow(false)
+    val isDecodedBinary = _isDecodedBinary.asStateFlow()
+
     private val _textState = MutableStateFlow<DataState<String>>(DataState.Loading())
     val textState = _textState.asStateFlow()
 
@@ -105,7 +120,11 @@ class TextEditorViewModel(file: Path) : ViewModel() {
                         is DataState.Success -> {
                             _textState.value = _textState.value.toLoading()
                             try {
-                                val text = withContext(Dispatchers.Default) {
+                                val decoded = withContext(Dispatchers.Default) {
+                                    BinaryTextDecoder.decode(_file.value, bytesState.data)
+                                }
+                                _isDecodedBinary.value = decoded != null
+                                val text = decoded ?: withContext(Dispatchers.Default) {
                                     String(bytesState.data, encoding)
                                 }
                                 currentCoroutineContext().ensureActive()
@@ -161,19 +180,8 @@ class TextEditorViewModel(file: Path) : ViewModel() {
         }
     }
 
-    private var editTextSavedState: Parcelable? = null
-
-    fun setEditTextSavedState(editTextSavedState: Parcelable?) {
-        this.editTextSavedState = editTextSavedState
-    }
-
-    fun removeEditTextSavedState(): Parcelable? {
-        val savedState = editTextSavedState
-        editTextSavedState = null
-        return savedState
-    }
-
     companion object {
-        private const val MAX_FILE_SIZE = 1024 * 1024.toLong()
+        private const val MAX_FILE_SIZE = 16 * 1024 * 1024.toLong()
+        private const val MAX_BINARY_FILE_SIZE = 64 * 1024 * 1024.toLong()
     }
 }

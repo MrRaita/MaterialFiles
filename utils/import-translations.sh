@@ -6,7 +6,6 @@ LOCALES=(
     bg
     ca
     cs
-    da
     de
     el
     es
@@ -14,7 +13,6 @@ LOCALES=(
     fa
     fi
     fr
-    gl
     hu
     in
     is

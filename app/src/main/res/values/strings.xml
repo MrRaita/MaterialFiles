@@ -262,6 +262,7 @@
     <string name="file_create_archive_password">Password (optional)</string>
     <string name="file_add_bookmark_success">Bookmark added</string>
     <string name="file_create_file_title">New file</string>
+    <string name="file_create_extension">Choose extension</string>
     <string name="file_create_directory_title">New folder</string>
 
     <string name="file_list_title">Files</string>
@@ -465,9 +466,6 @@
         <item>Android 12L</item>
         <item>Android 13</item>
         <item>Android 14</item>
-        <item>Android 15</item>
-        <item>Android 16</item>
-        <item>Android 17</item>
         <item>Android ?</item>
     </string-array>
     <string-array name="file_properites_apk_sdk_version_codenames" translatable="false">
@@ -506,9 +504,6 @@
         <item>S_V2</item>
         <item>T</item>
         <item>U</item>
-        <item>V</item>
-        <item>B</item>
-        <item>C</item>
         <item>\?</item>
     </string-array>
     <string name="file_properties_apk_requested_permissions">Permissions</string>
@@ -712,7 +707,43 @@
     <string name="text_editor_save_success">Saved</string>
     <string name="text_editor_reload_message">Are you sure you want to reload? Unsaved changes to this document will be lost.</string>
     <string name="text_editor_encoding">Encoding</string>
+    <string name="text_editor_unsaved_changes">Save the current file before opening another file</string>
     <string name="text_editor_close_message">Are you sure you want to discard unsaved changes to this document?</string>
+    <string name="text_editor_search">Find and replace</string>
+    <string name="text_editor_search_hint">Find</string>
+    <string name="text_editor_replace_hint">Replace with</string>
+    <string name="text_editor_match_case">Match case</string>
+    <string name="text_editor_whole_word">Whole word</string>
+    <string name="text_editor_regex">Regular expression</string>
+    <string name="text_editor_previous">Previous</string>
+    <string name="text_editor_next">Next</string>
+    <string name="text_editor_replace">Replace</string>
+    <string name="text_editor_replace_all">Replace all</string>
+    <string name="text_editor_undo">Undo</string>
+    <string name="text_editor_redo">Redo</string>
+    <string name="text_editor_settings">Editor settings</string>
+    <string name="text_editor_word_wrap">Word wrap</string>
+    <string name="text_editor_line_numbers">Line numbers</string>
+    <string name="text_editor_sticky_scroll">Sticky scroll</string>
+    <string name="text_editor_font_size">Font size</string>
+    <string name="text_editor_settings_title">Editor settings</string>
+    <string name="text_editor_search_error">Invalid regular expression</string>
+    <string name="text_editor_line_numbers_auto">Automatic</string>
+    <string name="text_editor_line_numbers_always">Always on</string>
+    <string name="text_editor_line_numbers_never">Always off</string>
+    <string name="text_editor_indent">Indent</string>
+    <string name="text_editor_outdent">Outdent</string>
+    <string name="text_editor_comment">Comment / uncomment</string>
+    <string name="text_editor_symbols">Symbols</string>
+    <string name="text_editor_symbols_show">Show symbols</string>
+    <string name="text_editor_symbols_hide">Hide symbols</string>
+    <string name="text_editor_compare">Compare file</string>
+    <string name="text_editor_compare_apply">Apply</string>
+    <string name="text_editor_compare_summary">%1$d missing entries and %2$d ordering changes found.</string>
+    <string name="text_editor_compare_repaired">%1$d misplaced resource names repaired.</string>
+    <string name="text_editor_compare_no_sync">Key-based synchronization is not supported for this file type.</string>
+    <string name="text_editor_save_as">Save as</string>
+
 
     <string name="ftp_server_title">FTP server</string>
     <string name="ftp_server_state_title">Status</string>
@@ -740,6 +771,43 @@
 
     <string name="settings_title">Settings</string>
     <string name="settings_interface_title">Interface</string>
+    <string name="settings_code_editor_title">Code editor</string>
+    <string name="settings_code_editor_summary">Code editing and syntax highlighting settings</string>
+    <string name="settings_editor_toolbar_title">Editor toolbar</string>
+    <string name="settings_code_editor_toolbar_title">Code editor toolbar</string>
+    <string name="settings_text_editor_toolbar_title">Text editor toolbar</string>
+    <string name="settings_editor_toolbar_summary">Choose, enable and reorder the actions above the keyboard</string>
+    <string name="settings_editor_toolbar_reorder">Drag to reorder</string>
+    <string name="settings_editor_symbol_bar_title">Symbol bar</string>
+    <string name="settings_editor_symbol_bar_summary">Show the extra symbols bar above the editor toolbar</string>
+    <string name="settings_text_editor_title">Text editor</string>
+    <string name="settings_text_editor_summary">Text editor settings</string>
+    <string name="settings_text_editor_syntax_highlighting_title">Syntax highlighting</string>
+    <string name="settings_text_editor_syntax_highlighting_summary">Highlight code according to the file type</string>
+    <string name="settings_text_editor_word_wrap_title">Word wrap</string>
+    <string name="settings_text_editor_word_wrap_summary">Wrap long lines instead of scrolling horizontally</string>
+    <string name="settings_text_editor_line_numbers_title">Line numbers</string>
+    <string name="settings_text_editor_line_numbers_auto">Automatic</string>
+    <string name="settings_text_editor_line_numbers_on">Always on</string>
+    <string name="settings_text_editor_line_numbers_off">Always off</string>
+    <string name="settings_text_editor_sticky_scroll_title">Sticky scroll</string>
+    <string name="settings_text_editor_font_size_title">Font size</string>
+    <string name="settings_text_editor_symbols_open_title">Open symbol row by default</string>
+    <string name="settings_text_editor_symbols_open_summary">Show the extra symbol row when the editor opens</string>
+    <string name="settings_text_editor_page_guide_title">A4 page guide for plain text</string>
+    <string name="settings_text_editor_page_guide_summary">Show a page-width guide in TXT, LOG, CSV and TSV files</string>
+    <string-array name="settings_text_editor_line_numbers_entries">
+        <item>Automatic</item>
+        <item>Always on</item>
+        <item>Always off</item>
+    </string-array>
+    <string-array name="settings_text_editor_font_size_entries">
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+    </string-array>
     <string name="settings_locale_title">Language</string>
     <string name="settings_theme_color_title">Theme color</string>
     <string name="settings_theme_color_summary">Color that appears most frequently in the app</string>
@@ -806,4 +874,87 @@
 
     <string name="shortcut_downloads_title" translatable="false">@string/navigation_standard_directory_downloads</string>
     <string name="shortcut_ftp_server_title" translatable="false">@string/ftp_server_title</string>
+<string name="pdf_viewer_page_count">%1$d pages</string>
+    <string name="pdf_viewer_go_to_page">Go to page</string>
+    <string name="pdf_viewer_page_number">Page number</string>
+    <string name="pdf_viewer_night_mode">Night mode</string>
+
+    <string name="image_editor_edit">Edit image</string>
+    <string name="image_editor_crop">Crop</string>
+    <string name="image_editor_rotate_left">Rotate left</string>
+    <string name="image_editor_rotate_right">Rotate right</string>
+    <string name="image_editor_flip_horizontal">Flip horizontally</string>
+    <string name="image_editor_flip_vertical">Flip vertically</string>
+    <string name="image_editor_grayscale">Grayscale</string>
+    <string name="image_editor_save_copy">Save edited copy</string>
+    <string name="settings_editor_appearance_title">Editor appearance</string>
+    <string name="settings_editor_appearance_summary">Customize editor themes, fonts and colors</string>
+    <string name="settings_editor_theme_title">Color theme</string>
+    <string name="settings_editor_font_family_title">Font family</string>
+    <string name="settings_editor_font_weight_title">Font weight</string>
+    <string name="settings_editor_font_ligatures_title">Programming ligatures</string>
+    <string name="settings_editor_font_ligatures_summary">Use combined glyphs for common code operators</string>
+    <string name="settings_editor_syntax_colors_title">Syntax colors</string>
+    <string name="settings_editor_ui_colors_title">Editor and toolbar colors</string>
+    <string name="settings_editor_color_background">Editor background</string>
+    <string name="settings_editor_color_text">Normal text</string>
+    <string name="settings_editor_color_comment">Comments</string>
+    <string name="settings_editor_color_keyword">Keywords</string>
+    <string name="settings_editor_color_string">Strings</string>
+    <string name="settings_editor_color_number">Numbers</string>
+    <string name="settings_editor_color_type">Types and classes</string>
+    <string name="settings_editor_color_function">Functions</string>
+    <string name="settings_editor_color_variable">Variables</string>
+    <string name="settings_editor_color_constant">Constants</string>
+    <string name="settings_editor_color_operator">Operators</string>
+    <string name="settings_editor_color_tag">Tags</string>
+    <string name="settings_editor_color_attribute">Attributes</string>
+    <string name="settings_editor_color_punctuation">Punctuation</string>
+    <string name="settings_editor_color_current_line">Current line</string>
+    <string name="settings_editor_color_selection">Selection</string>
+    <string name="settings_editor_color_gutter_background">Gutter background</string>
+    <string name="settings_editor_color_gutter_text">Line number text</string>
+    <string name="settings_editor_color_cursor">Cursor</string>
+    <string name="settings_editor_toolbar_background">Toolbar background</string>
+    <string name="settings_editor_toolbar_icon">Toolbar icon</string>
+    <string name="settings_editor_appearance_reset">Reset appearance</string>
+    <string name="settings_editor_appearance_reset_summary">Restore the default theme and custom colors</string>
+    <string name="editor_theme_github_dark">GitHub Dark</string>
+    <string name="editor_theme_github_light">GitHub Light</string>
+    <string name="editor_theme_dracula">Dracula</string>
+    <string name="editor_theme_one_dark">One Dark</string>
+    <string name="editor_theme_nord">Nord</string>
+    <string name="editor_theme_tokyo_night">Tokyo Night</string>
+    <string name="editor_theme_catppuccin_mocha">Catppuccin Mocha</string>
+    <string name="editor_theme_solarized_dark">Solarized Dark</string>
+    <string name="editor_theme_darcula">Darcula</string>
+    <string name="editor_theme_quiet_light">Quiet Light</string>
+    <string name="editor_font_system">System sans-serif</string>
+    <string name="editor_font_monospace">System monospace</string>
+    <string name="editor_font_serif">Serif</string>
+    <string name="editor_font_condensed">Condensed sans-serif</string>
+    <string name="editor_font_weight_normal">Normal</string>
+    <string name="editor_font_weight_medium">Medium</string>
+    <string name="editor_font_weight_bold">Bold</string>
+    <string-array name="settings_editor_theme_entries">
+        <item>@string/editor_theme_github_dark</item><item>@string/editor_theme_github_light</item><item>@string/editor_theme_dracula</item><item>@string/editor_theme_one_dark</item><item>@string/editor_theme_nord</item><item>@string/editor_theme_tokyo_night</item><item>@string/editor_theme_catppuccin_mocha</item><item>@string/editor_theme_solarized_dark</item><item>@string/editor_theme_darcula</item><item>@string/editor_theme_quiet_light</item>
+    </string-array>
+    <string-array name="settings_editor_theme_values">
+        <item>github_dark</item><item>github_light</item><item>dracula</item><item>one_dark</item><item>nord</item><item>tokyo_night</item><item>catppuccin_mocha</item><item>solarized_dark</item><item>darcula</item><item>quiet_light</item>
+    </string-array>
+    <string-array name="settings_editor_font_family_entries">
+        <item>@string/editor_font_system</item><item>@string/editor_font_monospace</item><item>@string/editor_font_serif</item><item>@string/editor_font_condensed</item>
+        <item>JetBrains Mono</item><item>Fira Code</item><item>Source Code Pro</item><item>Cascadia Code</item>
+    </string-array>
+    <string-array name="settings_editor_font_family_values">
+        <item>sans-serif</item><item>monospace</item><item>serif</item><item>sans-serif-condensed</item>
+        <item>jetbrains_mono</item><item>fira_code</item><item>source_code_pro</item><item>cascadia_code</item>
+    </string-array>
+    <string-array name="settings_editor_font_weight_entries">
+        <item>@string/editor_font_weight_normal</item><item>@string/editor_font_weight_medium</item><item>@string/editor_font_weight_bold</item>
+    </string-array>
+    <string-array name="settings_editor_font_weight_values">
+        <item>normal</item><item>medium</item><item>bold</item>
+    </string-array>
+    <string name="settings_editor_color_theme_default">Theme default</string>
 </resources>

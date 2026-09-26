@@ -58,7 +58,19 @@ private val extensionToMimeTypeOverrideMap = mapOf(
     "log" to "text/plain",
     "prop" to "text/plain",
     "properties" to "text/plain",
-    "rc" to "text/plain"
+    "rc" to "text/plain",
+    // Code/text formats that Android MIME databases often miss.
+    "kt" to "text/x-kotlin",
+    "kts" to "text/x-kotlin",
+    "gradle" to "text/x-gradle",
+    "toml" to "text/x-toml",
+    "zsh" to "text/x-shellscript",
+    "bash" to "text/x-shellscript",
+    "fish" to "text/x-shellscript",
+    "smali" to "text/x-smali",
+    "axml" to "application/xml",
+    "dex" to "application/vnd.android.dex",
+    "arsc" to "application/octet-stream"
 ).mapValues { it.value.asMimeType() }
 
 fun MimeType.Companion.forSpecialPosixFileType(type: PosixFileType): MimeType? =

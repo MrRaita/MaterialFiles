@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorSurface"
+    android:elevation="2dp"
+    android:orientation="vertical">
+
+    <!-- This row is deliberately above the main toolbar so it expands upward. -->
+    <HorizontalScrollView
+        android:id="@+id/symbolRow"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="?colorSurface"
+        android:scrollbars="none"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/symbolContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp" />
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/toolbarActions"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp" />
+        </HorizontalScrollView>
+
+        <ImageButton
+            android:id="@+id/symbolsToggle"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/text_editor_symbols_show"
+            android:src="@drawable/keyboard_arrow_up_icon_control_normal_24dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -28,6 +28,8 @@ import me.zhanghai.android.files.databinding.ImageViewerFragmentBinding
 import me.zhanghai.android.files.file.fileProviderUri
 import me.zhanghai.android.files.provider.common.delete
 import me.zhanghai.android.files.ui.DepthPageTransformer
+import me.zhanghai.android.files.util.createIntent
+import me.zhanghai.android.files.viewer.image.edit.ImageEditorActivity
 import me.zhanghai.android.files.util.ParcelableArgs
 import me.zhanghai.android.files.util.ParcelableListParceler
 import me.zhanghai.android.files.util.ParcelableState
@@ -151,6 +153,10 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
             }
             R.id.action_share -> {
                 share()
+                true
+            }
+            R.id.action_edit -> {
+                startActivitySafe(ImageEditorActivity::class.createIntent().apply { extraPath = currentPath })
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -1,0 +1,1 @@
+{"name":"Properties","scopeName":"source.properties","patterns":[{"name":"comment.line.properties","match":"^[#!].*$"},{"name":"entity.name.tag.property","match":"^[A-Za-z0-9_.-]+(?=\\s*[=:])"},{"name":"keyword.operator.assignment.properties","match":"[=:]"},{"name":"string.unquoted.value.properties","match":"(?<=[=:]).*$"}]}

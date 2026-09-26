@@ -20,12 +20,14 @@ import me.zhanghai.android.files.provider.common.newByteChannel
 import me.zhanghai.android.files.provider.common.newInputStream
 import me.zhanghai.android.files.provider.root.isRunningAsRoot
 import me.zhanghai.android.files.provider.root.rootContext
+import me.zhanghai.android.files.provider.linux.isLinuxPath
 import me.zhanghai.android.files.settings.Settings
 import me.zhanghai.android.files.util.valueCompat
 import java.io.Closeable
 import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
+import java.util.zip.ZipFile
 
 object ArchiveReader {
     @Throws(IOException::class)
@@ -103,6 +105,26 @@ object ArchiveReader {
 
     @Throws(IOException::class)
     fun newInputStream(file: Path, passwords: List<String>, entry: ReadArchive.Entry): InputStream? {
+        // Standard local ZIP files are extracted through java.util.zip when possible.
+        // This avoids libarchive stream/read issues that can appear with large stored
+        // Android images such as boot.img, init_boot.img and vendor_boot.img.
+        if (file.isLinuxPath && file.fileName.toString().lowercase().endsWith(".zip")) {
+            try {
+                val zip = ZipFile(file.toFile())
+                val zipEntry = zip.getEntry(entry.name)
+                if (zipEntry != null && !zipEntry.isDirectory) {
+                    val input = zip.getInputStream(zipEntry)
+                    return object : java.io.FilterInputStream(input) {
+                        override fun close() {
+                            try { super.close() } finally { zip.close() }
+                        }
+                    }
+                }
+                zip.close()
+            } catch (_: java.io.IOException) {
+                // Fall through to libarchive for encrypted/unusual ZIPs.
+            }
+        }
         val charset = archiveFileNameCharset
         val (archive, closeable) = openArchive(file, passwords)
         var successful = false

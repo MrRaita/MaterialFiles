@@ -61,6 +61,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
+        <activity android:name="me.zhanghai.android.files.viewer.image.edit.ImageEditorActivity" android:exported="false" />
+
+        <activity android:name="me.zhanghai.android.files.viewer.pdf.PdfViewerActivity" android:exported="false" />
+
         <activity
             android:name="me.zhanghai.android.files.filelist.FileListActivity"
             android:exported="true"
@@ -267,6 +271,30 @@
             android:theme="@style/Theme.MaterialFiles" />
 
         <activity
+            android:name="me.zhanghai.android.files.settings.CodeEditorSettingsActivity"
+            android:label="@string/settings_code_editor_title"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.MaterialFiles" />
+
+        <activity
+            android:name="me.zhanghai.android.files.settings.EditorAppearanceSettingsActivity"
+            android:label="@string/settings_editor_appearance_title"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.MaterialFiles" />
+
+        <activity
+            android:name="me.zhanghai.android.files.settings.EditorToolbarSettingsActivity"
+            android:label="@string/settings_editor_toolbar_title"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.MaterialFiles" />
+
+        <activity
+            android:name="me.zhanghai.android.files.settings.TextEditorSettingsActivity"
+            android:label="@string/settings_text_editor_title"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.MaterialFiles" />
+
+        <activity
             android:name="me.zhanghai.android.files.settings.StandardDirectoryListActivity"
             android:label="@string/settings_standard_directory_list_title"
             android:launchMode="singleTop"
@@ -320,12 +348,20 @@
         </activity>
 
         <activity
+            android:name="me.zhanghai.android.files.viewer.text.PlainTextEditorActivity"
+            android:exported="false"
+            android:label="@string/text_editor_title"
+            android:theme="@style/Theme.MaterialFiles" />
+
+        <activity
             android:name="me.zhanghai.android.files.viewer.text.TextEditorActivity"
+            android:launchMode="singleTop"
             android:exported="true"
             android:label="@string/text_editor_title"
             android:theme="@style/Theme.MaterialFiles">
             <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/ecmascript" />
                 <data android:mimeType="application/javascript" />
@@ -356,7 +392,7 @@
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="This is a generic file manager app supporting both local and network storages, and background file operations with large files or a large amount of files, potentially over a slow network connection, can easily exceed the six-hour limit of dataSync, so that this service has to use specialUse to maintain the user expected behavior of completing the requested file operations in all cases." />
+                android:value="This is a generic file manager app supporting both local and network storages, and background file operations with large files or a large amount of files, potentially over a slow network connection, may exceed the six-hour limit of dataSync, so that this service has to use specialUse to maintain the user expected behavior of completing the requested file operations in all cases." />
         </service>
 
         <service
@@ -364,7 +400,7 @@
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="This is a generic file manager app offering a FTP server functionality that allows serving files from local or network storages to the local network, and users expect it to keep serving in the background for days or even weeks once they start it and until they manually end it, so that this service has to use specialUse to maintain the user expected behavior of keeping serving the files until manually ended." />
+                android:value="This is a generic file manager app offering a FTP server functionality that allows serving files from local or network storages to the local network, and users expect it to keep serving in the background once they start it and until they manually end it, so that this service has to use specialUse to maintain the user expected behavior of keeping serving the files until manually ended." />
         </service>
 
         <service

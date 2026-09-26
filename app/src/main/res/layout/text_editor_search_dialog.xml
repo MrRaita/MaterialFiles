@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="8dp">
+
+    <EditText
+        android:id="@+id/searchQuery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/text_editor_search_hint"
+        android:inputType="text"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/searchReplacement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/text_editor_replace_hint"
+        android:inputType="text"
+        android:singleLine="true" />
+
+    <CheckBox
+        android:id="@+id/searchMatchCase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_editor_match_case" />
+
+    <CheckBox
+        android:id="@+id/searchWholeWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_editor_whole_word" />
+
+    <CheckBox
+        android:id="@+id/searchRegex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_editor_regex" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/searchPrevious"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_editor_previous" />
+        <Button
+            android:id="@+id/searchNext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_editor_next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/searchReplace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_editor_replace" />
+        <Button
+            android:id="@+id/searchReplaceAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_editor_replace_all" />
+    </LinearLayout>
+</LinearLayout>

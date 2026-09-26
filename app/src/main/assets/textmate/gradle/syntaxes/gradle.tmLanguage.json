@@ -1,0 +1,15 @@
+{
+  "name": "Gradle",
+  "scopeName": "source.gradle",
+  "patterns": [
+    { "name": "comment.line.double-slash.gradle", "match": "//.*$" },
+    { "name": "comment.block.gradle", "begin": "/\\*", "end": "\\*/" },
+    { "name": "string.quoted.double.gradle", "begin": "\\\"", "end": "\\\"" },
+    { "name": "string.quoted.single.gradle", "begin": "'", "end": "'" },
+    { "name": "keyword.control.gradle", "match": "\\b(if|else|for|in|while|return|def|class|new|try|catch|finally)\\b" },
+    { "name": "support.function.gradle", "match": "\\b(plugins|dependencies|repositories|android|buildscript|tasks|project|subprojects|allprojects|implementation|api|compileOnly|runtimeOnly|testImplementation|classpath)\\b" },
+    { "name": "constant.numeric.gradle", "match": "\\b[0-9]+(?:\\.[0-9]+)?\\b" },
+    { "name": "keyword.operator.assignment.gradle", "match": "[=:+\\-*/%]" },
+    { "name": "variable.other.gradle", "match": "\\$\\{?[A-Za-z_][A-Za-z0-9_]*\\}?" }
+  ]
+}

@@ -438,11 +438,11 @@ Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_endmntent(
 
 static __thread gid_t getgrentGid = AID_APP_START;
 
-void setgrent() {
+static void mf_setgrent() {
     getgrentGid = 0;
 }
 
-struct group *getgrent() {
+static struct group *mf_getgrent() {
     while (getgrentGid < AID_APP_START) {
         struct group *group = getgrgid(getgrentGid);
         ++getgrentGid;
@@ -454,15 +454,15 @@ struct group *getgrent() {
     return NULL;
 }
 
-void endgrent() {
-    setgrent();
+static void mf_endgrent() {
+    mf_setgrent();
 }
 
 #endif
 
 JNIEXPORT void JNICALL
 Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_endgrent(JNIEnv *env, jclass clazz) {
-    TEMP_FAILURE_RETRY_V(endgrent());
+    TEMP_FAILURE_RETRY_V(mf_endgrent());
     if (errno) {
         throwSyscallException(env, "endgrent");
     }
@@ -472,11 +472,11 @@ Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_endgrent(JNIEnv *e
 
 static __thread uid_t getpwentUid = AID_APP_START;
 
-void setpwent() {
+static void mf_setpwent() {
     getpwentUid = 0;
 }
 
-struct passwd *getpwent() {
+static struct passwd *mf_getpwent() {
     while (getpwentUid < AID_APP_START) {
         struct passwd *passwd = getpwuid(getpwentUid);
         ++getpwentUid;
@@ -488,15 +488,15 @@ struct passwd *getpwent() {
     return NULL;
 }
 
-void endpwent() {
-    setpwent();
+static void mf_endpwent() {
+    mf_setpwent();
 }
 
 #endif
 
 JNIEXPORT void JNICALL
 Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_endpwent(JNIEnv *env, jclass clazz) {
-    TEMP_FAILURE_RETRY_V(endpwent());
+    TEMP_FAILURE_RETRY_V(mf_endpwent());
     if (errno) {
         throwSyscallException(env, "endpwent");
     }
@@ -593,7 +593,7 @@ JNIEXPORT jobject JNICALL
 Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_getgrent(JNIEnv *env, jclass clazz) {
     while (true) {
         // getgrent() in bionic is thread safe.
-        struct group *group = TEMP_FAILURE_RETRY_N(getgrent());
+        struct group *group = TEMP_FAILURE_RETRY_N(mf_getgrent());
         if (errno) {
             throwSyscallException(env, "getgrent");
             return NULL;
@@ -833,7 +833,7 @@ JNIEXPORT jobject JNICALL
 Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_getpwent(JNIEnv *env, jclass clazz) {
     while (true) {
         // getpwent() in bionic is thread safe.
-        struct passwd *passwd = TEMP_FAILURE_RETRY_N(getpwent());
+        struct passwd *passwd = TEMP_FAILURE_RETRY_N(mf_getpwent());
         if (errno) {
             throwSyscallException(env, "getpwent");
             return NULL;
@@ -1499,7 +1499,7 @@ Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_sendfile(
 
 JNIEXPORT void JNICALL
 Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_setgrent(JNIEnv *env, jclass clazz) {
-    TEMP_FAILURE_RETRY_V(setgrent());
+    TEMP_FAILURE_RETRY_V(mf_setgrent());
     if (errno) {
         throwSyscallException(env, "setgrent");
     }
@@ -1522,7 +1522,7 @@ Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_setmntent(
 
 JNIEXPORT void JNICALL
 Java_me_zhanghai_android_files_provider_linux_syscall_Syscall_setpwent(JNIEnv *env, jclass clazz) {
-    TEMP_FAILURE_RETRY_V(setpwent());
+    TEMP_FAILURE_RETRY_V(mf_setpwent());
     if (errno) {
         throwSyscallException(env, "setpwent");
     }

@@ -64,6 +64,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
         CustomThemeHelper.sync()
     }
 
+
     override fun onResume() {
         super.onResume()
 

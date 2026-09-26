@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="8dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <include layout="@layout/name_dialog_name_include" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="24dp" android:layout_marginTop="8dp" android:text="@string/file_create_extension" android:textAppearance="?textAppearanceBodyMedium" />
+        <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none">
+            <com.google.android.material.chip.ChipGroup android:id="@+id/extensionGroup" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingBottom="4dp" app:singleSelection="true" xmlns:app="http://schemas.android.com/apk/res-auto" />
+        </HorizontalScrollView>
+    </LinearLayout>
+</FrameLayout>

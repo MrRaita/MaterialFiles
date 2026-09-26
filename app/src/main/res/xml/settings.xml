@@ -70,6 +70,14 @@
             android:title="@string/settings_standard_directories_title"
             android:summary="@string/settings_standard_directories_summary_empty" />
 
+        <me.zhanghai.android.files.settings.CodeEditorSettingsPreference
+            android:title="@string/settings_code_editor_title"
+            android:summary="@string/settings_code_editor_summary" />
+
+        <me.zhanghai.android.files.settings.TextEditorSettingsPreference
+            android:title="@string/settings_text_editor_title"
+            android:summary="@string/settings_text_editor_summary" />
+
         <me.zhanghai.android.files.settings.BookmarkDirectoriesPreference
             android:title="@string/settings_bookmark_directories_title"
             android:summary="@string/settings_bookmark_directories_summary_empty" />

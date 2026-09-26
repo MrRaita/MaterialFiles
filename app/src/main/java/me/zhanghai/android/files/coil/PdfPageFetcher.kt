@@ -51,7 +51,7 @@ class PdfPageFetcher(
                         "PDF page $pageIndex width $srcWidth isn't greater than 0"
                     }
                     val srcHeight = page.height
-                    check(srcWidth > 0) {
+                    check(srcHeight > 0) {
                         "PDF page $pageIndex height $srcHeight isn't greater than 0"
                     }
                     val dstWidth = options.size.widthPx(options.scale) { srcWidth }

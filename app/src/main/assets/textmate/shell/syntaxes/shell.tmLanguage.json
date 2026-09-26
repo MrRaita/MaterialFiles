@@ -1,0 +1,15 @@
+{
+  "name": "Shell",
+  "scopeName": "source.shell",
+  "patterns": [
+    { "name": "comment.line.number-sign.shell", "match": "#.*$" },
+    { "name": "keyword.control.shell", "match": "\\b(if|then|else|elif|fi|for|while|in|do|done|case|esac|function|select|until|time)\\b" },
+    { "name": "support.function.builtin.shell", "match": "\\b(cd|echo|printf|export|source|alias|unalias|read|set|unset|shift|test|true|false|exit|return|local|declare|typeset|readonly|eval|exec|trap|wait|jobs|fg|bg|pwd|pushd|popd)\\b" },
+    { "name": "variable.other.shell", "match": "\\$\\{?[A-Za-z_][A-Za-z0-9_]*\\}?|\\$[0-9@#?$!-]+" },
+    { "name": "string.quoted.double.shell", "begin": "\\\"", "end": "\\\"", "patterns": [{ "include": "#variable" }] },
+    { "name": "string.quoted.single.shell", "begin": "'", "end": "'" },
+    { "name": "keyword.operator.shell", "match": "&&|\\|\\||>>|<<|[|><;&]" },
+    { "name": "constant.numeric.shell", "match": "\\b[0-9]+\\b" },
+    { "name": "entity.name.function.shell", "match": "\\b[A-Za-z_][A-Za-z0-9_-]*(?=\\s|$)" }
+  ]
+}

@@ -87,7 +87,7 @@ abstract class NameDialogFragment : AppCompatDialogFragment() {
 
     protected abstract fun onOk(name: String)
 
-    protected open class Binding protected constructor(
+    open class Binding(
         val root: View,
         val nameLayout: TextInputLayout,
         val nameEdit: EditText

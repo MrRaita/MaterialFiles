@@ -18,6 +18,9 @@ import me.zhanghai.android.files.provider.archive.isArchivePath
 import me.zhanghai.android.files.util.createViewIntent
 import me.zhanghai.android.files.util.extraPath
 import me.zhanghai.android.files.util.startActivitySafe
+import me.zhanghai.android.files.viewer.text.TextEditorActivity
+import me.zhanghai.android.files.viewer.pdf.PdfViewerActivity
+import me.zhanghai.android.files.util.createIntent
 
 class OpenFileActivity : AppActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +36,14 @@ class OpenFileActivity : AppActivity() {
     }
 
     private fun openFile(path: Path, mimeType: MimeType) {
+        if (!path.isArchivePath && mimeType == MimeType.PDF) {
+            startActivitySafe(PdfViewerActivity::class.createIntent().apply { extraPath = path })
+            return
+        }
+        if (!path.isArchivePath && TextEditorActivity.shouldHandle(path, mimeType)) {
+            startActivitySafe(TextEditorActivity.createIntent(path, mimeType))
+            return
+        }
         if (path.isArchivePath) {
             FileJobService.open(path, mimeType, false, this)
         } else {

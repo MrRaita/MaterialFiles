@@ -14,10 +14,6 @@ import android.widget.Toast
 import androidx.annotation.AnyRes
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
-import java.io.ByteArrayInputStream
-import java.io.File
-import java.io.IOException
-import java.io.InterruptedIOException
 import java8.nio.file.CopyOption
 import java8.nio.file.DirectoryIteratorException
 import java8.nio.file.FileAlreadyExistsException
@@ -31,8 +27,6 @@ import java8.nio.file.SimpleFileVisitor
 import java8.nio.file.StandardCopyOption
 import java8.nio.file.StandardOpenOption
 import java8.nio.file.attribute.BasicFileAttributes
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.runBlocking
 import me.zhanghai.android.files.R
 import me.zhanghai.android.files.app.BackgroundActivityStarter
@@ -96,6 +90,12 @@ import me.zhanghai.android.files.util.putArgs
 import me.zhanghai.android.files.util.showToast
 import me.zhanghai.android.files.util.toEnumSet
 import me.zhanghai.android.files.util.withChooser
+import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.IOException
+import java.io.InterruptedIOException
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 fun FileJob.getString(@StringRes stringRes: Int): String {
     return service.getString(stringRes)
@@ -137,9 +137,12 @@ private fun FileJob.postNotification(
         //setContentIntent()
         if (showCancel) {
             val intent = FileJobReceiver.createIntent(id)
+            var pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                pendingIntentFlags = pendingIntentFlags or PendingIntent.FLAG_IMMUTABLE
+            }
             val pendingIntent = PendingIntent.getBroadcast(
-                service, id + 1, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                service, id + 1, intent, pendingIntentFlags
             )
             addAction(
                 R.drawable.close_icon_white_24dp, getString(android.R.string.cancel), pendingIntent

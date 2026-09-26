@@ -82,4 +82,43 @@
     <bool name="pref_visible_show_pdf_thumbnail_pre_28">true</bool>
     <string name="pref_key_read_remote_files_for_thumbnail">key_read_remote_files_for_thumbnail</string>
     <bool name="pref_default_value_read_remote_files_for_thumbnail">true</bool>
+    <string name="pref_key_code_editor_syntax_highlighting">key_code_editor_syntax_highlighting</string>
+    <bool name="pref_default_value_code_editor_syntax_highlighting">true</bool>
+    <string name="pref_key_code_editor_word_wrap">key_code_editor_word_wrap</string>
+    <bool name="pref_default_value_code_editor_word_wrap">false</bool>
+    <string name="pref_key_code_editor_line_numbers">key_code_editor_line_numbers</string>
+    <string name="pref_default_value_code_editor_line_numbers">auto</string>
+    <string name="pref_key_code_editor_sticky_scroll">key_code_editor_sticky_scroll</string>
+    <bool name="pref_default_value_code_editor_sticky_scroll">true</bool>
+    <string name="pref_key_code_editor_font_size">key_code_editor_font_size</string>
+    <string name="pref_default_value_code_editor_font_size">14</string>
+    <string name="pref_key_editor_toolbar_settings">key_editor_toolbar_settings</string>
+    <string name="pref_key_text_editor_syntax_highlighting">key_text_editor_syntax_highlighting</string>
+    <bool name="pref_default_value_text_editor_syntax_highlighting">true</bool>
+    <string name="pref_key_text_editor_word_wrap">key_text_editor_word_wrap</string>
+    <bool name="pref_default_value_text_editor_word_wrap">false</bool>
+    <string name="pref_key_text_editor_line_numbers">key_text_editor_line_numbers</string>
+    <string name="pref_default_value_text_editor_line_numbers">auto</string>
+    <string-array name="pref_entry_values_text_editor_line_numbers">
+        <item>auto</item>
+        <item>on</item>
+        <item>off</item>
+    </string-array>
+    <string name="pref_key_text_editor_sticky_scroll">key_text_editor_sticky_scroll</string>
+    <bool name="pref_default_value_text_editor_sticky_scroll">true</bool>
+    <string name="pref_key_text_editor_font_size">key_text_editor_font_size</string>
+    <string name="pref_default_value_text_editor_font_size">16</string>
+    <string-array name="pref_entry_values_text_editor_font_size">
+        <item>12</item>
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+    </string-array>
+    <string name="pref_key_text_editor_symbols_open">key_text_editor_symbols_open</string>
+    <bool name="pref_default_value_text_editor_symbols_open">false</bool>
+    <string name="pref_key_text_editor_page_guide">key_text_editor_page_guide</string>
+    <bool name="pref_default_value_text_editor_page_guide">true</bool>
+
+    <string name="pref_key_editor_appearance_settings">key_editor_appearance_settings</string>
 </resources>

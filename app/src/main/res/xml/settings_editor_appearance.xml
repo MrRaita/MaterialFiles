@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <rikka.preference.SimpleMenuPreference
+        android:key="key_editor_theme"
+        android:title="@string/settings_editor_theme_title"
+        android:defaultValue="github_dark"
+        android:entries="@array/settings_editor_theme_entries"
+        android:entryValues="@array/settings_editor_theme_values"
+        app:useSimpleSummaryProvider="true" />
+    <rikka.preference.SimpleMenuPreference
+        android:key="key_editor_font_family"
+        android:title="@string/settings_editor_font_family_title"
+        android:defaultValue="monospace"
+        android:entries="@array/settings_editor_font_family_entries"
+        android:entryValues="@array/settings_editor_font_family_values"
+        app:useSimpleSummaryProvider="true" />
+    <rikka.preference.SimpleMenuPreference
+        android:key="key_editor_font_weight"
+        android:title="@string/settings_editor_font_weight_title"
+        android:defaultValue="normal"
+        android:entries="@array/settings_editor_font_weight_entries"
+        android:entryValues="@array/settings_editor_font_weight_values"
+        app:useSimpleSummaryProvider="true" />
+    <SwitchPreferenceCompat
+        android:key="key_editor_font_ligatures"
+        android:title="@string/settings_editor_font_ligatures_title"
+        android:summary="@string/settings_editor_font_ligatures_summary"
+        android:defaultValue="true" />
+
+    <PreferenceCategory android:key="key_editor_syntax_colors_category" android:title="@string/settings_editor_syntax_colors_title">
+        <Preference android:key="key_editor_color_background" android:title="@string/settings_editor_color_background" />
+        <Preference android:key="key_editor_color_text" android:title="@string/settings_editor_color_text" />
+        <Preference android:key="key_editor_color_comment" android:title="@string/settings_editor_color_comment" />
+        <Preference android:key="key_editor_color_keyword" android:title="@string/settings_editor_color_keyword" />
+        <Preference android:key="key_editor_color_string" android:title="@string/settings_editor_color_string" />
+        <Preference android:key="key_editor_color_number" android:title="@string/settings_editor_color_number" />
+        <Preference android:key="key_editor_color_type" android:title="@string/settings_editor_color_type" />
+        <Preference android:key="key_editor_color_function" android:title="@string/settings_editor_color_function" />
+        <Preference android:key="key_editor_color_variable" android:title="@string/settings_editor_color_variable" />
+        <Preference android:key="key_editor_color_constant" android:title="@string/settings_editor_color_constant" />
+        <Preference android:key="key_editor_color_operator" android:title="@string/settings_editor_color_operator" />
+        <Preference android:key="key_editor_color_tag" android:title="@string/settings_editor_color_tag" />
+        <Preference android:key="key_editor_color_attribute" android:title="@string/settings_editor_color_attribute" />
+        <Preference android:key="key_editor_color_punctuation" android:title="@string/settings_editor_color_punctuation" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_editor_ui_colors_title">
+        <Preference android:key="key_editor_color_current_line" android:title="@string/settings_editor_color_current_line" />
+        <Preference android:key="key_editor_color_selection" android:title="@string/settings_editor_color_selection" />
+        <Preference android:key="key_editor_color_gutter_background" android:title="@string/settings_editor_color_gutter_background" />
+        <Preference android:key="key_editor_color_gutter_text" android:title="@string/settings_editor_color_gutter_text" />
+        <Preference android:key="key_editor_color_cursor" android:title="@string/settings_editor_color_cursor" />
+        <Preference android:key="key_editor_toolbar_background" android:title="@string/settings_editor_toolbar_background" />
+        <Preference android:key="key_editor_toolbar_icon" android:title="@string/settings_editor_toolbar_icon" />
+    </PreferenceCategory>
+
+    <Preference
+        android:key="key_editor_appearance_reset"
+        android:title="@string/settings_editor_appearance_reset"
+        android:summary="@string/settings_editor_appearance_reset_summary" />
+</PreferenceScreen>
