@@ -86,6 +86,7 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
 
     private var isSettingText = false
     private var textMateReady = false
+    private var lastAppliedThemeName: String? = null
     private val preferences: SharedPreferences by lazy {
         PreferenceManager.getDefaultSharedPreferences(requireContext())
     }
@@ -150,9 +151,19 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
     override fun onResume() {
         super.onResume()
         if (this::binding.isInitialized) {
-            if (!isPlainTextMode) {
+            // setupEditor() (called from onViewCreated) already performed a full TextMate
+            // grammar/theme setup once. Redoing that unconditionally on every single resume
+            // (including the very first one right after creation, and any trivial resume
+            // unrelated to settings, e.g. switching apps and coming back) is expensive and
+            // causes visible stutter. Only redo the heavy TextMate/theme rebuild when the
+            // user's saved theme has actually changed since we last applied it; otherwise
+            // just re-apply the lightweight font/appearance/toolbar preferences so real
+            // settings changes still always show up when returning to this screen.
+            val currentThemeName = preferences.getString(prefKey(PREF_EDITOR_THEME), "github_dark")
+            if (!isPlainTextMode && currentThemeName != lastAppliedThemeName) {
                 textMateReady = setupTextMate()
             }
+            lastAppliedThemeName = currentThemeName
             applyEditorPreferences()
             if (viewModel.textState.value is DataState.Success) {
                 applyLanguage()
@@ -407,6 +418,7 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             themeRegistry.loadTheme(model)
             themeRegistry.setTheme(model.name)
             binding.textEdit.colorScheme = TextMateColorScheme.create(themeRegistry)
+            lastAppliedThemeName = themeName
             textMateReady = true
             true
         } catch (e: Throwable) {
@@ -781,6 +793,12 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
     private fun updateToolbarActions() {
         if (!this::binding.isInitialized) return
         buildToolbarActions()
+        val symbolBarEnabled = preferences.getBoolean(prefKey(PREF_SYMBOL_BAR_ENABLED), true)
+        val hasToolbarActions = binding.editorToolbar.toolbarActions.childCount > 0
+        binding.editorToolbar.root.visibility =
+            if (!symbolBarEnabled && !hasToolbarActions) View.GONE else View.VISIBLE
+        binding.editorToolbar.toolbarBar.visibility =
+            if (!symbolBarEnabled && !hasToolbarActions) View.GONE else View.VISIBLE
     }
 
     private fun getToolbarOrder(): List<String> {

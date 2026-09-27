@@ -63,6 +63,11 @@
 
         <activity android:name="me.zhanghai.android.files.viewer.image.edit.ImageEditorActivity" android:exported="false" />
 
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
         <activity android:name="me.zhanghai.android.files.viewer.pdf.PdfViewerActivity" android:exported="false" />
 
         <activity

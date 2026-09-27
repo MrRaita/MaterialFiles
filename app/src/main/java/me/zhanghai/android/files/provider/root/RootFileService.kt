@@ -13,6 +13,7 @@ import me.zhanghai.android.files.BuildConfig
 import me.zhanghai.android.files.compat.UserHandleCompat
 import me.zhanghai.android.files.provider.FileSystemProviders
 import me.zhanghai.android.files.provider.remote.RemoteFileService
+import me.zhanghai.android.files.provider.remote.RemoteFileSystemException
 import me.zhanghai.android.files.provider.remote.RemoteInterface
 import me.zhanghai.android.files.util.lazyReflectedMethod
 
@@ -29,12 +30,19 @@ lateinit var rootContext: Context private set
 
 object RootFileService : RemoteFileService(
     RemoteInterface {
-        if (LibSuFileServiceLauncher.isSuAvailable()) {
+        // isSuAvailable() only checks that a "su" binary can be spawned via Runtime.exec(),
+        // which is unreliable on some root implementations (e.g. KernelSU/KernelSU Next,
+        // where "su" may not be resolvable through the app process's own PATH even though
+        // root access has genuinely been granted). Instead, actually attempt the real su
+        // shell handshake first and only fall back to Shizuku if that attempt truly fails.
+        try {
             LibSuFileServiceLauncher.launchService()
-        } else if (ShizukuFileServiceLauncher.isAvailable()) {
-            ShizukuFileServiceLauncher.launchService()
-        } else {
-            LibSuFileServiceLauncher.launchService()
+        } catch (e: RemoteFileSystemException) {
+            if (ShizukuFileServiceLauncher.isAvailable()) {
+                ShizukuFileServiceLauncher.launchService()
+            } else {
+                throw e
+            }
         }
     }
 ) {

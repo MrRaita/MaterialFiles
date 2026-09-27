@@ -55,7 +55,7 @@ class ImageEditorActivity : AppActivity() {
                 return
             }
             image.setImageBitmap(bitmap)
-        } catch (e: Exception) { finish() }
+        } catch (e: Throwable) { finish() }
     }
 
     private fun calculateInSampleSize(

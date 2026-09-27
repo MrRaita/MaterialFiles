@@ -3,58 +3,77 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
+    android:paddingStart="?dialogPreferredPadding"
+    android:paddingEnd="?dialogPreferredPadding"
     android:paddingTop="8dp">
 
-    <EditText
-        android:id="@+id/searchQuery"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchQueryLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/text_editor_search_hint"
-        android:inputType="text"
-        android:singleLine="true" />
+        android:hint="@string/text_editor_search_hint">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:singleLine="true">
+            <requestFocus />
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/searchReplacement"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchReplacementLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="@string/text_editor_replace_hint"
-        android:inputType="text"
-        android:singleLine="true" />
+        android:hint="@string/text_editor_replace_hint">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchReplacement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/searchMatchCase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="@string/text_editor_match_case" />
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/searchWholeWord"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text_editor_whole_word" />
 
-    <CheckBox
+    <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/searchRegex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:text="@string/text_editor_regex" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:gravity="end"
         android:orientation="horizontal">
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/searchPrevious"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/text_editor_previous" />
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/searchNext"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -66,14 +85,17 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:orientation="horizontal">
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/searchReplace"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:text="@string/text_editor_replace" />
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/searchReplaceAll"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

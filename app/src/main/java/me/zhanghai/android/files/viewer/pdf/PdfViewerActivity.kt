@@ -42,7 +42,7 @@ class PdfViewerActivity : AppActivity() {
         adapter = PdfAdapter(renderer, night)
         binding.pages.layoutManager = LinearLayoutManager(this)
         binding.pages.adapter = adapter
-        val saved = getPreferences(0).getInt("page_${path}", 0).coerceIn(0, renderer.pageCount - 1)
+        val saved = getPreferences(0).getInt("page_${path}", 0).coerceIn(0, (renderer.pageCount - 1).coerceAtLeast(0))
         binding.pages.scrollToPosition(saved)
         binding.pages.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -68,7 +68,7 @@ class PdfViewerActivity : AppActivity() {
             .setNegativeButton(android.R.string.cancel, null)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 val page = input.text.toString().toIntOrNull()?.minus(1) ?: return@setPositiveButton
-                binding.pages.scrollToPosition(page.coerceIn(0, renderer.pageCount - 1))
+                binding.pages.scrollToPosition(page.coerceIn(0, (renderer.pageCount - 1).coerceAtLeast(0)))
             }.show()
     }
 
@@ -84,8 +84,8 @@ class PdfViewerActivity : AppActivity() {
         override fun onBindViewHolder(holder: Holder, position: Int) {
             val page = renderer.openPage(position)
             val width = parentWidth(holder.itemView as ViewGroup).coerceAtLeast(600)
-            val scale = width.toFloat() / page.width
-            val bitmap = Bitmap.createBitmap(width, (page.height * scale).toInt().coerceAtLeast(1), Bitmap.Config.ARGB_8888)
+            val scale = width.toFloat() / page.width.coerceAtLeast(1)
+            val bitmap = Bitmap.createBitmap(width, (page.height * scale).toInt().coerceIn(1, 8192), Bitmap.Config.ARGB_8888)
             bitmap.eraseColor(Color.WHITE)
             page.render(bitmap, null, null, android.graphics.pdf.PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
             page.close()
