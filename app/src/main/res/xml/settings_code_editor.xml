@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <SwitchPreferenceCompat
-        android:key="@string/pref_key_code_editor_syntax_highlighting"
-        android:title="@string/settings_text_editor_syntax_highlighting_title"
-        android:summary="@string/settings_text_editor_syntax_highlighting_summary"
-        android:defaultValue="@bool/pref_default_value_code_editor_syntax_highlighting" />
-    <SwitchPreferenceCompat
-        android:key="@string/pref_key_code_editor_word_wrap"
-        android:title="@string/settings_text_editor_word_wrap_title"
-        android:summary="@string/settings_text_editor_word_wrap_summary"
-        android:defaultValue="@bool/pref_default_value_code_editor_word_wrap" />
-    <rikka.preference.SimpleMenuPreference
-        android:key="@string/pref_key_code_editor_line_numbers"
-        android:title="@string/settings_text_editor_line_numbers_title"
-        android:defaultValue="@string/pref_default_value_code_editor_line_numbers"
-        android:entries="@array/settings_text_editor_line_numbers_entries"
-        android:entryValues="@array/pref_entry_values_text_editor_line_numbers"
-        app:useSimpleSummaryProvider="true" />
-    <SwitchPreferenceCompat
-        android:key="@string/pref_key_code_editor_sticky_scroll"
-        android:title="@string/settings_text_editor_sticky_scroll_title"
-        android:defaultValue="@bool/pref_default_value_code_editor_sticky_scroll" />
-    <rikka.preference.SimpleMenuPreference
-        android:key="@string/pref_key_code_editor_font_size"
-        android:title="@string/settings_text_editor_font_size_title"
-        android:defaultValue="@string/pref_default_value_code_editor_font_size"
-        android:entries="@array/settings_text_editor_font_size_entries"
-        android:entryValues="@array/pref_entry_values_text_editor_font_size"
-        app:useSimpleSummaryProvider="true" />
-    <SwitchPreferenceCompat
-        android:key="key_code_editor_symbol_bar"
-        android:title="@string/settings_editor_symbol_bar_title"
-        android:summary="@string/settings_editor_symbol_bar_summary"
-        android:defaultValue="true" />
-    <Preference
-        android:key="@string/pref_key_editor_toolbar_settings"
-        android:title="@string/settings_editor_toolbar_title"
-        android:summary="@string/settings_editor_toolbar_summary" />
-    <Preference
-        android:key="@string/pref_key_editor_appearance_settings"
-        android:title="@string/settings_editor_appearance_title"
-        android:summary="@string/settings_editor_appearance_summary" />
+    <PreferenceCategory android:title="@string/settings_editor_category_editing">
+        <SwitchPreferenceCompat
+            android:key="@string/pref_key_code_editor_syntax_highlighting"
+            android:title="@string/settings_text_editor_syntax_highlighting_title"
+            android:summary="@string/settings_text_editor_syntax_highlighting_summary"
+            android:defaultValue="@bool/pref_default_value_code_editor_syntax_highlighting" />
+        <SwitchPreferenceCompat
+            android:key="@string/pref_key_code_editor_word_wrap"
+            android:title="@string/settings_text_editor_word_wrap_title"
+            android:summary="@string/settings_text_editor_word_wrap_summary"
+            android:defaultValue="@bool/pref_default_value_code_editor_word_wrap" />
+        <rikka.preference.SimpleMenuPreference
+            android:key="@string/pref_key_code_editor_line_numbers"
+            android:title="@string/settings_text_editor_line_numbers_title"
+            android:defaultValue="@string/pref_default_value_code_editor_line_numbers"
+            android:entries="@array/settings_text_editor_line_numbers_entries"
+            android:entryValues="@array/pref_entry_values_text_editor_line_numbers"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            android:key="@string/pref_key_code_editor_sticky_scroll"
+            android:title="@string/settings_text_editor_sticky_scroll_title"
+            android:defaultValue="@bool/pref_default_value_code_editor_sticky_scroll" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_editor_category_appearance">
+        <rikka.preference.SimpleMenuPreference
+            android:key="@string/pref_key_code_editor_font_size"
+            android:title="@string/settings_text_editor_font_size_title"
+            android:defaultValue="@string/pref_default_value_code_editor_font_size"
+            android:entries="@array/settings_text_editor_font_size_entries"
+            android:entryValues="@array/pref_entry_values_text_editor_font_size"
+            app:useSimpleSummaryProvider="true" />
+        <Preference
+            android:key="@string/pref_key_editor_appearance_settings"
+            android:title="@string/settings_editor_appearance_title"
+            android:summary="@string/settings_editor_appearance_summary" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_editor_category_toolbar">
+        <SwitchPreferenceCompat
+            android:key="key_code_editor_symbol_bar"
+            android:title="@string/settings_editor_symbol_bar_title"
+            android:summary="@string/settings_editor_symbol_bar_summary"
+            android:defaultValue="true" />
+        <Preference
+            android:key="@string/pref_key_editor_toolbar_settings"
+            android:title="@string/settings_editor_toolbar_title"
+            android:summary="@string/settings_editor_toolbar_summary" />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -780,6 +780,9 @@
     <string name="settings_editor_toolbar_reorder">Drag to reorder</string>
     <string name="settings_editor_symbol_bar_title">Symbol bar</string>
     <string name="settings_editor_symbol_bar_summary">Show the extra symbols bar above the editor toolbar</string>
+    <string name="settings_editor_category_editing">Editing</string>
+    <string name="settings_editor_category_appearance">Appearance</string>
+    <string name="settings_editor_category_toolbar">Keyboard toolbar</string>
     <string name="settings_text_editor_title">Text editor</string>
     <string name="settings_text_editor_summary">Text editor settings</string>
     <string name="settings_text_editor_syntax_highlighting_title">Syntax highlighting</string>

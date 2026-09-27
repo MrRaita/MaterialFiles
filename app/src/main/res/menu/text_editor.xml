@@ -33,9 +33,10 @@
 
     <item
         android:id="@+id/action_search"
-        android:orderInCategory="200"
+        android:icon="@drawable/search_icon_control_normal_24dp"
+        android:orderInCategory="110"
         android:title="@string/text_editor_search"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_undo"

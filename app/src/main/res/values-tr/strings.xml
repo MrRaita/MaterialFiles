@@ -530,6 +530,11 @@
     <string name="settings_code_editor_title">Kod düzenleyici</string>
     <string name="settings_code_editor_summary">Kod düzenleme ve sözdizimi vurgulama ayarları</string>
     <string name="settings_editor_toolbar_title">Düzenleyici araç çubuğu</string>
+    <string name="settings_editor_symbol_bar_title">Sembol çubuğu</string>
+    <string name="settings_editor_symbol_bar_summary">Düzenleyici araç çubuğunun üzerinde ek sembol satırını göster</string>
+    <string name="settings_editor_category_editing">Düzenleme</string>
+    <string name="settings_editor_category_appearance">Görünüm</string>
+    <string name="settings_editor_category_toolbar">Klavye araç çubuğu</string>
     <string name="settings_editor_toolbar_summary">Klavyenin üzerindeki işlemleri seç, etkinleştir ve sıralarını değiştir</string>
     <string name="settings_editor_toolbar_reorder">Sıralamak için sürükle</string>
     <string name="settings_text_editor_title">Metin düzenleyici</string>
