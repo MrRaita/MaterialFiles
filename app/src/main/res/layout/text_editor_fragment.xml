@@ -25,6 +25,13 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             app:popupTheme="?actionBarPopupTheme" />
+
+        <include
+            android:id="@+id/searchBar"
+            layout="@layout/text_editor_search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
     </me.zhanghai.android.files.ui.CoordinatorAppBarLayout>
 
     <me.zhanghai.android.files.ui.CoordinatorScrollingFrameLayout

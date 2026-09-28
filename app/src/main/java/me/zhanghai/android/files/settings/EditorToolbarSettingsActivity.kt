@@ -48,12 +48,13 @@ class EditorToolbarSettingsActivity : AppActivity() {
     private class Adapter(private val activity: EditorToolbarSettingsActivity, private val plainText: Boolean) : RecyclerView.Adapter<Holder>() {
         private val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(activity)
         private val prefix = if (plainText) "key_text_editor_" else "key_code_editor_"
-        private val defaults = listOf("undo","redo","cut","copy","paste","select_all","indent","outdent","comment","search")
+        private val defaults = listOf("undo","redo","cut","copy","paste","select_all","indent","outdent","comment","search","find_replace")
         private val labels = mapOf(
             "undo" to R.string.text_editor_undo, "redo" to R.string.text_editor_redo, "cut" to R.string.cut,
             "copy" to R.string.copy, "paste" to R.string.paste, "select_all" to R.string.select_all,
             "indent" to R.string.text_editor_indent, "outdent" to R.string.text_editor_outdent,
-            "comment" to R.string.text_editor_comment, "search" to R.string.text_editor_search
+            "comment" to R.string.text_editor_comment, "search" to R.string.text_editor_find,
+            "find_replace" to R.string.text_editor_search
         )
         private val items = getOrder().toMutableList()
         var itemTouchHelper: ItemTouchHelper? = null
@@ -81,7 +82,10 @@ class EditorToolbarSettingsActivity : AppActivity() {
         fun save() { prefs.edit().putString(prefix + "toolbar_actions", items.joinToString(",") { it.removePrefix("!") }).apply(); prefs.edit().putString(prefix + "toolbar_enabled", items.filter { !it.startsWith("!") }.joinToString(",")).apply() }
         private fun getOrder(): List<String> {
             val order = prefs.getString(prefix + "toolbar_actions", null)?.split(',')?.filter { it.isNotBlank() } ?: defaults
-            val enabled = prefs.getString(prefix + "toolbar_enabled", null)?.split(',')?.filter { it.isNotBlank() }?.toSet() ?: defaults.toSet()
+            val storedIds = prefs.getString(prefix + "toolbar_actions", null)?.split(',')?.filter { it.isNotBlank() }?.map { it.removePrefix("!") }
+            // Actions added after the user last saved the toolbar layout are enabled by default.
+            val newIds = defaults.filter { storedIds != null && it !in storedIds }
+            val enabled = prefs.getString(prefix + "toolbar_enabled", null)?.split(',')?.filter { it.isNotBlank() }?.toSet()?.plus(newIds) ?: defaults.toSet()
             val normalized = order.map { it.removePrefix("!") }.filter { it in defaults } + defaults.filter { it !in order.map { x -> x.removePrefix("!") } }
             return normalized.map { if (it in enabled) it else "!$it" }
         }

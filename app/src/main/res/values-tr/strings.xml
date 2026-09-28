@@ -475,6 +475,11 @@
     <string name="text_editor_close_message">Bu belgedeki kaydedilmemiş değişiklikleri atmak istediğinizden emin misiniz?</string>
     <string name="text_editor_search">Bul ve değiştir</string>
     <string name="text_editor_search_hint">Bul</string>
+    <string name="text_editor_find">Ara</string>
+    <string name="text_editor_find_hint">Ara</string>
+    <string name="text_editor_find_previous">Önceki sonuç</string>
+    <string name="text_editor_find_next">Sonraki sonuç</string>
+    <string name="text_editor_find_close">Aramayı kapat</string>
     <string name="text_editor_replace_hint">Şununla değiştir</string>
     <string name="text_editor_match_case">Büyük/küçük harfe duyarlı</string>
     <string name="text_editor_whole_word">Tam sözcük</string>

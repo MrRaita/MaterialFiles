@@ -35,6 +35,7 @@ import me.zhanghai.android.files.provider.common.readAllBytes
 
 import me.zhanghai.android.files.filelist.FileListActivity
 import me.zhanghai.android.files.filejob.FileJobService
+import me.zhanghai.android.files.settings.CodeEditorSettingsActivity
 import me.zhanghai.android.files.settings.TextEditorSettingsActivity
 import me.zhanghai.android.files.util.createIntent
 import me.zhanghai.android.files.util.ActionState
@@ -159,11 +160,9 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             // user's saved theme has actually changed since we last applied it; otherwise
             // just re-apply the lightweight font/appearance/toolbar preferences so real
             // settings changes still always show up when returning to this screen.
-            val currentThemeName = preferences.getString(prefKey(PREF_EDITOR_THEME), "github_dark")
-            if (!isPlainTextMode && currentThemeName != lastAppliedThemeName) {
+            if (!isPlainTextMode && currentThemeSignature() != lastAppliedThemeName) {
                 textMateReady = setupTextMate()
             }
-            lastAppliedThemeName = currentThemeName
             applyEditorPreferences()
             if (viewModel.textState.value is DataState.Success) {
                 applyLanguage()
@@ -179,6 +178,7 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
 
     override fun onDestroyView() {
         if (this::binding.isInitialized) {
+            searchHandler.removeCallbacksAndMessages(null)
             binding.textEdit.release()
         }
         super.onDestroyView()
@@ -209,6 +209,10 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
                 true
             }
             R.id.action_search -> {
+                toggleSearchBar()
+                true
+            }
+            R.id.action_find_replace -> {
                 showSearchDialog()
                 true
             }
@@ -273,6 +277,7 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         binding.textEdit.setOnScrollChangeListener { _, _, _, _, _ -> binding.pageGuide.invalidate() }
         binding.pageGuide.attachTo(binding.textEdit)
         populateSymbols()
+        setupSearchBar()
 
         binding.textEdit.apply {
             props.stickyScroll = !isPlainTextMode
@@ -328,7 +333,164 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         menuBinding.redoItem.isEnabled = binding.textEdit.canRedo()
     }
 
+    // region Inline search bar (live search with previous/next arrows and a match counter)
+
+    private val searchHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private var searchBackCallback: OnBackPressedCallback? = null
+    private var searchQueryDispatched: String? = null
+    private var searchJumpedToFirstMatch = false
+    private val liveSearchRunnable = Runnable { runSearch() }
+
+    private val isSearchBarVisible: Boolean
+        get() = this::binding.isInitialized && binding.searchBar.root.visibility == View.VISIBLE
+
+    private fun currentSearchQuery(): String =
+        binding.searchBar.searchBarInput.text?.toString().orEmpty()
+
+    private fun setupSearchBar() {
+        val bar = binding.searchBar
+        bar.searchBarInput.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+            override fun afterTextChanged(s: android.text.Editable?) {
+                searchHandler.removeCallbacks(liveSearchRunnable)
+                searchHandler.postDelayed(liveSearchRunnable, 120)
+            }
+        })
+        bar.searchBarInput.setOnEditorActionListener { _, actionId, event ->
+            val isEnter = event != null && event.keyCode == android.view.KeyEvent.KEYCODE_ENTER &&
+                event.action == android.view.KeyEvent.ACTION_DOWN
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH || isEnter) {
+                goToSearchMatch(true)
+                true
+            } else {
+                false
+            }
+        }
+        bar.searchBarNext.setOnClickListener { goToSearchMatch(true) }
+        bar.searchBarPrevious.setOnClickListener { goToSearchMatch(false) }
+        bar.searchBarClose.setOnClickListener { closeSearchBar() }
+    }
+
+    private fun toggleSearchBar() {
+        if (isSearchBarVisible) closeSearchBar() else openSearchBar()
+    }
+
+    private fun openSearchBar() {
+        if (!this::binding.isInitialized) return
+        binding.searchBar.root.visibility = View.VISIBLE
+        val input = binding.searchBar.searchBarInput
+        input.requestFocus()
+        input.setSelection(input.text?.length ?: 0)
+        input.post {
+            requireContext().getSystemService(android.view.inputmethod.InputMethodManager::class.java)
+                ?.showSoftInput(input, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
+        }
+        // Back closes the search bar first (registered last, so it has priority over other callbacks).
+        searchBackCallback?.remove()
+        searchBackCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                closeSearchBar()
+            }
+        }.also { requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, it) }
+        if (currentSearchQuery().isNotEmpty()) runSearch() else updateSearchCount()
+    }
+
+    private fun closeSearchBar() {
+        if (!this::binding.isInitialized) return
+        searchHandler.removeCallbacksAndMessages(null)
+        searchBackCallback?.remove()
+        searchBackCallback = null
+        if (binding.searchBar.root.visibility == View.VISIBLE) {
+            binding.searchBar.root.visibility = View.GONE
+            binding.textEdit.searcher.stopSearch()
+            searchQueryDispatched = null
+            requireContext().getSystemService(android.view.inputmethod.InputMethodManager::class.java)
+                ?.hideSoftInputFromWindow(binding.searchBar.searchBarInput.windowToken, 0)
+        }
+    }
+
+    private fun runSearch() {
+        if (!isSearchBarVisible) return
+        val query = currentSearchQuery()
+        val searcher = binding.textEdit.searcher
+        if (query.isEmpty()) {
+            searcher.stopSearch()
+            searchQueryDispatched = null
+            updateSearchCount()
+            return
+        }
+        try {
+            searcher.search(query, SearchOptions(SearchOptions.TYPE_NORMAL, true, null))
+            searchQueryDispatched = query
+            searchJumpedToFirstMatch = false
+            pollSearchResult(query, 0)
+        } catch (_: Exception) {
+            updateSearchCount()
+        }
+    }
+
+    // Sora computes the matches asynchronously, so wait for them before jumping to the first one.
+    private fun pollSearchResult(query: String, attempt: Int) {
+        if (!isSearchBarVisible || searchQueryDispatched != query || currentSearchQuery() != query) return
+        updateSearchCount()
+        val count = searcherInt("getMatchedPositionCount")
+        val ready = if (count == null) attempt >= 3 else count > 0
+        if (ready && !searchJumpedToFirstMatch) {
+            searchJumpedToFirstMatch = true
+            binding.textEdit.searcher.gotoNext()
+            updateSearchCount()
+            searchHandler.postDelayed({ updateSearchCount() }, 60)
+        } else if (!ready && attempt < 25) {
+            searchHandler.postDelayed({ pollSearchResult(query, attempt + 1) }, 60)
+        }
+    }
+
+    private fun goToSearchMatch(next: Boolean) {
+        if (!isSearchBarVisible) return
+        val query = currentSearchQuery()
+        if (query.isEmpty()) return
+        if (searchQueryDispatched != query) {
+            runSearch()
+            return
+        }
+        try {
+            val searcher = binding.textEdit.searcher
+            if (next) searcher.gotoNext() else searcher.gotoPrevious()
+        } catch (_: Exception) {
+        }
+        updateSearchCount()
+        searchHandler.postDelayed({ updateSearchCount() }, 60)
+    }
+
+    private fun updateSearchCount() {
+        if (!this::binding.isInitialized) return
+        val label = binding.searchBar.searchBarCount
+        if (currentSearchQuery().isEmpty()) {
+            label.text = ""
+            return
+        }
+        val count = searcherInt("getMatchedPositionCount")
+        if (count == null) {
+            label.text = ""
+            return
+        }
+        val index = searcherInt("getCurrentMatchedPositionIndex") ?: -1
+        label.text = "${if (index >= 0) index + 1 else 0}/$count"
+    }
+
+    // The counter accessors are read reflectively so a different Sora version can never break the build.
+    private fun searcherInt(methodName: String): Int? = try {
+        val searcher = binding.textEdit.searcher
+        searcher.javaClass.getMethod(methodName).invoke(searcher) as? Int
+    } catch (_: Throwable) {
+        null
+    }
+
+    // endregion
+
     private fun showSearchDialog() {
+        closeSearchBar()
         val dialogBinding = me.zhanghai.android.files.databinding.TextEditorSearchDialogBinding.inflate(layoutInflater)
         val searcher = binding.textEdit.searcher
         dialogBinding.searchQuery.addTextChangedListener(object : android.text.TextWatcher {
@@ -397,28 +559,16 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
                 }
             }
             val themeName = preferences.getString(prefKey(PREF_EDITOR_THEME), "github_dark") ?: "github_dark"
-            val overrides = mapOf(
-                "key_editor_color_background" to preferences.getString(prefKey("key_editor_color_background"), ""),
-                "key_editor_color_text" to preferences.getString(prefKey("key_editor_color_text"), ""),
-                "key_editor_color_comment" to preferences.getString(prefKey("key_editor_color_comment"), ""),
-                "key_editor_color_keyword" to preferences.getString(prefKey("key_editor_color_keyword"), ""),
-                "key_editor_color_string" to preferences.getString(prefKey("key_editor_color_string"), ""),
-                "key_editor_color_number" to preferences.getString(prefKey("key_editor_color_number"), ""),
-                "key_editor_color_type" to preferences.getString(prefKey("key_editor_color_type"), ""),
-                "key_editor_color_function" to preferences.getString(prefKey("key_editor_color_function"), ""),
-                "key_editor_color_variable" to preferences.getString(prefKey("key_editor_color_variable"), ""),
-                "key_editor_color_constant" to preferences.getString(prefKey("key_editor_color_constant"), ""),
-                "key_editor_color_operator" to preferences.getString(prefKey("key_editor_color_operator"), ""),
-                "key_editor_color_tag" to preferences.getString(prefKey("key_editor_color_tag"), ""),
-                "key_editor_color_attribute" to preferences.getString(prefKey("key_editor_color_attribute"), ""),
-                "key_editor_color_punctuation" to preferences.getString(prefKey("key_editor_color_punctuation"), "")
-            ).mapValues { it.value ?: "" }
-            val model = EditorThemeFactory.themeModel(themeName, EditorThemeFactory.paletteWithOverrides(themeName, overrides))
+            val palette = EditorThemeFactory.paletteWithOverrides(themeName, currentColorOverrides())
+            // The tm4e ThemeRegistry keeps the FIRST model registered under a given name, so the
+            // registry name must change whenever the effective colors change; otherwise edited
+            // custom colors (same base theme) would silently keep using the stale model.
+            val model = EditorThemeFactory.themeModel(themeSignature(themeName, palette), palette)
             val themeRegistry = ThemeRegistry.getInstance()
             themeRegistry.loadTheme(model)
             themeRegistry.setTheme(model.name)
             binding.textEdit.colorScheme = TextMateColorScheme.create(themeRegistry)
-            lastAppliedThemeName = themeName
+            lastAppliedThemeName = themeSignature(themeName, palette)
             textMateReady = true
             true
         } catch (e: Throwable) {
@@ -426,6 +576,22 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             textMateReady = false
             false
         }
+    }
+
+    private fun currentColorOverrides(): Map<String, String> = listOf(
+        "key_editor_color_background", "key_editor_color_text", "key_editor_color_comment",
+        "key_editor_color_keyword", "key_editor_color_string", "key_editor_color_number",
+        "key_editor_color_type", "key_editor_color_function", "key_editor_color_variable",
+        "key_editor_color_constant", "key_editor_color_operator", "key_editor_color_tag",
+        "key_editor_color_attribute", "key_editor_color_punctuation"
+    ).associateWith { preferences.getString(prefKey(it), "") ?: "" }
+
+    private fun themeSignature(themeName: String, palette: EditorThemeFactory.Palette): String =
+        "$themeName-${palette.hashCode().toString(16)}"
+
+    private fun currentThemeSignature(): String {
+        val themeName = preferences.getString(prefKey(PREF_EDITOR_THEME), "github_dark") ?: "github_dark"
+        return themeSignature(themeName, EditorThemeFactory.paletteWithOverrides(themeName, currentColorOverrides()))
     }
 
     private fun applyEditorAppearance() {
@@ -594,7 +760,12 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
     }
 
     private fun openEditorSettings() {
-        startActivitySafe(TextEditorSettingsActivity::class.createIntent())
+        // Code and plain-text editors have fully separate settings (key_code_editor_* vs
+        // key_text_editor_*). Always open the settings screen that belongs to the mode this
+        // editor is currently running in, otherwise the user edits keys this editor never reads.
+        val intent = if (isPlainTextMode) TextEditorSettingsActivity::class.createIntent()
+            else CodeEditorSettingsActivity::class.createIntent()
+        startActivitySafe(intent)
     }
 
     private fun onEncodingChanged(encoding: Charset) {
@@ -768,7 +939,8 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         ToolbarAction("indent", R.string.text_editor_indent, R.drawable.google_format_indent_increase_24dp) { indentSelection(false) },
         ToolbarAction("outdent", R.string.text_editor_outdent, R.drawable.google_format_indent_decrease_24dp) { indentSelection(true) },
         ToolbarAction("comment", R.string.text_editor_comment, R.drawable.google_comment_24dp) { toggleComment() },
-        ToolbarAction("search", R.string.text_editor_search, R.drawable.google_search_24dp) { showSearchDialog() }
+        ToolbarAction("search", R.string.text_editor_find, R.drawable.google_search_24dp) { toggleSearchBar() },
+        ToolbarAction("find_replace", R.string.text_editor_search, R.drawable.google_find_replace_24dp) { showSearchDialog() }
     )
 
     private fun buildToolbarActions() {
@@ -802,9 +974,11 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
     }
 
     private fun getToolbarOrder(): List<String> {
-        val defaults = listOf("undo", "redo", "cut", "copy", "paste", "select_all", "indent", "outdent", "comment", "search")
+        val defaults = listOf("undo", "redo", "cut", "copy", "paste", "select_all", "indent", "outdent", "comment", "search", "find_replace")
         val stored = preferences.getString(toolbarPrefKey(PREF_TOOLBAR_ACTIONS), null)?.split(',')?.filter { it.isNotBlank() }
-        val enabled = preferences.getString(toolbarPrefKey(PREF_TOOLBAR_ENABLED), null)?.split(',')?.filter { it.isNotBlank() }?.toSet() ?: defaults.toSet()
+        // Actions that were added after the user last saved the toolbar layout are enabled by default.
+        val newIds = defaults.filter { stored != null && it !in stored }
+        val enabled = preferences.getString(toolbarPrefKey(PREF_TOOLBAR_ENABLED), null)?.split(',')?.filter { it.isNotBlank() }?.toSet()?.plus(newIds) ?: defaults.toSet()
         val order = if (stored.isNullOrEmpty()) defaults else stored.filter { it in defaults } + defaults.filter { it !in stored }
         return order.filter { it in enabled }
     }

@@ -711,6 +711,11 @@
     <string name="text_editor_close_message">Are you sure you want to discard unsaved changes to this document?</string>
     <string name="text_editor_search">Find and replace</string>
     <string name="text_editor_search_hint">Find</string>
+    <string name="text_editor_find">Search</string>
+    <string name="text_editor_find_hint">Search</string>
+    <string name="text_editor_find_previous">Previous result</string>
+    <string name="text_editor_find_next">Next result</string>
+    <string name="text_editor_find_close">Close search</string>
     <string name="text_editor_replace_hint">Replace with</string>
     <string name="text_editor_match_case">Match case</string>
     <string name="text_editor_whole_word">Whole word</string>
