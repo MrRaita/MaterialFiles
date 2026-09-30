@@ -35,8 +35,8 @@ android {
         // Not supporting the ACCESS_LOCAL_NETWORK runtime permission yet.
         //noinspection OldTargetApi
         targetSdk 36
-        versionCode 41
-        versionName '1.7.6'
+        versionCode 42
+        versionName '1.7.7'
         resValue 'string', 'app_version', versionName + ' (' + versionCode + ')'
         buildConfigField 'String', 'FILE_PROVIDIER_AUTHORITY', 'APPLICATION_ID + ".file_provider"'
         resValue 'string', 'app_provider_authority', applicationId + '.app_provider'
@@ -71,7 +71,22 @@ android {
         // Referenced from org.apache.mina.proxy.ProxyAuthException."
         warning 'InvalidPackage', 'MissingTranslation'
     }
+    signingConfigs {
+        // Stable, non-secret debug key committed to the repo (app/pr-debug.jks). Using it for
+        // every debug build means PR pre-release APKs always share the same signature across
+        // separate GitHub Actions runs, so a new pre-release can be installed over an old one
+        // instead of failing with a signature mismatch. This is NOT the real release key.
+        debug {
+            storeFile file('pr-debug.jks')
+            storePassword 'materialfiles-pr'
+            keyAlias 'prdebugkey'
+            keyPassword 'materialfiles-pr'
+        }
+    }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             minifyEnabled true
             shrinkResources true

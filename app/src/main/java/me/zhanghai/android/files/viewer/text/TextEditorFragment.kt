@@ -304,7 +304,8 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             else preferences.getBoolean(PREF_CODE_WORD_WRAP, false)
         binding.textEdit.setWordwrap(wordWrap)
 
-        val lineNumbers = if (isPlainTextMode) false else when (preferences.getString(PREF_CODE_LINE_NUMBERS_MODE, MODE_AUTO)) {
+        val lineNumbers = if (isPlainTextMode) preferences.getBoolean(PREF_TEXT_LINE_NUMBERS, false)
+            else when (preferences.getString(PREF_CODE_LINE_NUMBERS_MODE, MODE_AUTO)) {
             MODE_ON -> true
             MODE_OFF -> false
             else -> shouldShowLineNumbersByDefault()
@@ -424,25 +425,49 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             searcher.search(query, SearchOptions(SearchOptions.TYPE_NORMAL, true, null))
             searchQueryDispatched = query
             searchJumpedToFirstMatch = false
+            // Sora computes matches on a background thread, so we cannot jump to the first
+            // result the instant search() returns: on a larger file, or right after fast
+            // typing keeps the main thread busy, the results simply are not ready yet and an
+            // immediate gotoNext() silently does nothing. Poll for real progress instead of
+            // guessing a fixed delay, so this keeps working no matter how long a search takes.
             pollSearchResult(query, 0)
         } catch (_: Exception) {
             updateSearchCount()
         }
     }
 
-    // Sora computes the matches asynchronously, so wait for them before jumping to the first one.
+    // Keeps retrying gotoNext() until it actually moves the cursor (proof the search finished),
+    // the match count getter (if available on this library version) confirms zero results, or a
+    // generous ceiling is hit. This never skips ahead to the second match: gotoNext() is called
+    // at most once per attempt and only while we have not yet confirmed a successful first jump.
     private fun pollSearchResult(query: String, attempt: Int) {
         if (!isSearchBarVisible || searchQueryDispatched != query || currentSearchQuery() != query) return
+        if (searchJumpedToFirstMatch) return
         updateSearchCount()
         val count = searcherInt("getMatchedPositionCount")
-        val ready = if (count == null) attempt >= 3 else count > 0
-        if (ready && !searchJumpedToFirstMatch) {
-            searchJumpedToFirstMatch = true
+        if (count == 0) {
+            // Confirmed no matches; nothing to jump to, stop retrying.
+            return
+        }
+        val cursor = binding.textEdit.cursor
+        val beforeLine = cursor.leftLine
+        val beforeColumn = cursor.leftColumn
+        try {
             binding.textEdit.searcher.gotoNext()
+        } catch (_: Exception) {
+        }
+        val moved = cursor.leftLine != beforeLine || cursor.leftColumn != beforeColumn
+        if (moved) {
+            searchJumpedToFirstMatch = true
             updateSearchCount()
-            searchHandler.postDelayed({ updateSearchCount() }, 60)
-        } else if (!ready && attempt < 25) {
-            searchHandler.postDelayed({ pollSearchResult(query, attempt + 1) }, 60)
+            return
+        }
+        // Not ready yet (or gotoNext() genuinely could not move because there are 0 matches and
+        // the count getter is unavailable on this library version). Keep trying for up to ~3s.
+        if (attempt < 40) {
+            searchHandler.postDelayed({ pollSearchResult(query, attempt + 1) }, 75)
+        } else {
+            updateSearchCount()
         }
     }
 
@@ -1174,6 +1199,7 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         private const val PREF_CODE_STICKY_SCROLL = "key_code_editor_sticky_scroll"
         private const val PREF_CODE_FONT_SIZE = "key_code_editor_font_size"
         private const val PREF_TEXT_WORD_WRAP = "key_text_editor_word_wrap"
+        private const val PREF_TEXT_LINE_NUMBERS = "key_text_editor_line_numbers"
         private const val PREF_TEXT_FONT_SIZE = "key_text_editor_font_size"
         private const val PREF_TEXT_PAGE_GUIDE = "key_text_editor_page_guide"
         private const val PREF_SYMBOLS_OPEN = "key_editor_symbols_open"

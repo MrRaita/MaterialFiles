@@ -548,6 +548,8 @@
     <string name="settings_text_editor_syntax_highlighting_summary">Dosya türüne göre kodu renklendir</string>
     <string name="settings_text_editor_word_wrap_title">Satırları kaydır</string>
     <string name="settings_text_editor_word_wrap_summary">Uzun satırları yatay kaydırmak yerine kaydır</string>
+    <string name="settings_text_editor_show_line_numbers_title">Satır numaralarını göster</string>
+    <string name="settings_text_editor_show_line_numbers_summary">Düz metin dosyalarında normalde kapalı olan satır numaralarını göster</string>
     <string name="settings_text_editor_line_numbers_title">Satır numaraları</string>
     <string name="settings_text_editor_line_numbers_auto">Otomatik</string>
     <string name="settings_text_editor_line_numbers_on">Her zaman açık</string>
@@ -606,6 +608,7 @@
         <item>Yalnızca normal erişim</item>
         <item>Otomatik</item>
         <item>Yalnızca kök erişimi</item>
+        <item>Yalnızca Shizuku (asla düz kök kullanma)</item>
     </string-array>
     <string name="settings_archive_file_name_encoding_title">Arşiv dosya adı kodlaması</string>
     <string name="settings_open_apk_default_action_title">Android paketini aç</string>
@@ -632,6 +635,7 @@
     <string name="pdf_viewer_night_mode">Gece modu</string>
 
     <string name="image_editor_edit">Görseli düzenle</string>
+    <string name="image_editor_crop">Kırp</string>
     <string name="image_editor_rotate_left">Sola döndür</string>
     <string name="image_editor_rotate_right">Sağa döndür</string>
     <string name="image_editor_flip_horizontal">Yatay çevir</string>

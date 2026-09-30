@@ -33,7 +33,7 @@ fun <T, R> callRootable(
             } else {
                 localObject.block()
             }
-        RootStrategy.ALWAYS -> rootObject.block()
+        RootStrategy.ALWAYS, RootStrategy.SHIZUKU -> rootObject.block()
     }
 }
 
@@ -58,7 +58,7 @@ fun <T, R> callRootable(
             } else {
                 localObject.block()
             }
-        RootStrategy.ALWAYS ->
+        RootStrategy.ALWAYS, RootStrategy.SHIZUKU ->
             rootObject.block()
     }
 }

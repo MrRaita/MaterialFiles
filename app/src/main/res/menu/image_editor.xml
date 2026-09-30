@@ -1,10 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/action_crop" android:title="@string/image_editor_crop" />
-    <item android:id="@+id/action_rotate_left" android:title="@string/image_editor_rotate_left" />
-    <item android:id="@+id/action_rotate_right" android:title="@string/image_editor_rotate_right" />
-    <item android:id="@+id/action_flip_horizontal" android:title="@string/image_editor_flip_horizontal" />
-    <item android:id="@+id/action_flip_vertical" android:title="@string/image_editor_flip_vertical" />
-    <item android:id="@+id/action_grayscale" android:title="@string/image_editor_grayscale" />
-    <item android:id="@+id/action_save_copy" android:title="@string/image_editor_save_copy" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_crop"
+        android:icon="@drawable/image_editor_crop_24dp"
+        android:orderInCategory="10"
+        android:title="@string/image_editor_crop"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_rotate_left"
+        android:orderInCategory="20"
+        android:title="@string/image_editor_rotate_left"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_rotate_right"
+        android:orderInCategory="30"
+        android:title="@string/image_editor_rotate_right"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_flip_horizontal"
+        android:orderInCategory="40"
+        android:title="@string/image_editor_flip_horizontal"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_flip_vertical"
+        android:orderInCategory="50"
+        android:title="@string/image_editor_flip_vertical"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_grayscale"
+        android:orderInCategory="60"
+        android:title="@string/image_editor_grayscale"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_save_copy"
+        android:icon="@drawable/check_icon_control_normal_24dp"
+        android:orderInCategory="70"
+        android:title="@string/image_editor_save_copy"
+        app:showAsAction="always" />
 </menu>

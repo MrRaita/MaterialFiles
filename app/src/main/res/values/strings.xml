@@ -794,6 +794,8 @@
     <string name="settings_text_editor_syntax_highlighting_summary">Highlight code according to the file type</string>
     <string name="settings_text_editor_word_wrap_title">Word wrap</string>
     <string name="settings_text_editor_word_wrap_summary">Wrap long lines instead of scrolling horizontally</string>
+    <string name="settings_text_editor_show_line_numbers_title">Show line numbers</string>
+    <string name="settings_text_editor_show_line_numbers_summary">Show line numbers, off by default for plain text files</string>
     <string name="settings_text_editor_line_numbers_title">Line numbers</string>
     <string name="settings_text_editor_line_numbers_auto">Automatic</string>
     <string name="settings_text_editor_line_numbers_on">Always on</string>
@@ -858,6 +860,7 @@
         <item>Normal access only</item>
         <item>Automatic</item>
         <item>Root access only</item>
+        <item>Shizuku only (never plain root)</item>
     </string-array>
     <string name="settings_archive_file_name_encoding_title">Archive file name encoding</string>
     <string name="settings_open_apk_default_action_title">Open Android package</string>
