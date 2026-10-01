@@ -1,10 +1,13 @@
 package me.zhanghai.android.files.viewer.pdf
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -22,7 +25,12 @@ import me.zhanghai.android.files.app.AppActivity
 
 class PdfViewerActivity : AppActivity() {
     private lateinit var binding: PdfViewerFragmentBinding
-    private lateinit var path: Path
+    // Only set when opened from within Material Files itself (extraPath); null when opened
+    // externally via "Open with" / a VIEW intent from another app, in which case we only have
+    // the raw content:// (or file://) Uri handed to us and no internal Path at all.
+    private var path: Path? = null
+    private lateinit var pdfUri: Uri
+    private lateinit var positionKey: String
     private lateinit var descriptor: ParcelFileDescriptor
     private lateinit var renderer: android.graphics.pdf.PdfRenderer
     private lateinit var adapter: PdfAdapter
@@ -32,26 +40,54 @@ class PdfViewerActivity : AppActivity() {
         super.onCreate(savedInstanceState)
         binding = PdfViewerFragmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        path = intent.extraPath ?: run { finish(); return }
-        descriptor = contentResolver.openFileDescriptor(path.fileProviderUri, "r") ?: run { finish(); return }
+        val title: String
+        val internalPath = intent.extraPath
+        if (internalPath != null) {
+            path = internalPath
+            pdfUri = internalPath.fileProviderUri
+            title = internalPath.fileName.toString()
+            positionKey = "page_$internalPath"
+        } else if (intent.action == Intent.ACTION_VIEW && intent.data != null) {
+            val uri = intent.data!!
+            pdfUri = uri
+            title = queryDisplayName(uri) ?: uri.lastPathSegment ?: getString(R.string.pdf_viewer_untitled)
+            positionKey = "page_$uri"
+        } else {
+            finish(); return
+        }
+        descriptor = try {
+            contentResolver.openFileDescriptor(pdfUri, "r") ?: run { finish(); return }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            finish(); return
+        }
         renderer = android.graphics.pdf.PdfRenderer(descriptor)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = path.fileName.toString()
+        supportActionBar?.title = title
         supportActionBar?.subtitle = getString(R.string.pdf_viewer_page_count, renderer.pageCount)
         adapter = PdfAdapter(renderer, night)
         binding.pages.layoutManager = LinearLayoutManager(this)
         binding.pages.adapter = adapter
-        val saved = getPreferences(0).getInt("page_${path}", 0).coerceIn(0, (renderer.pageCount - 1).coerceAtLeast(0))
+        val saved = getPreferences(0).getInt(positionKey, 0).coerceIn(0, (renderer.pageCount - 1).coerceAtLeast(0))
         binding.pages.scrollToPosition(saved)
         binding.pages.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     val pos = (binding.pages.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                    if (pos >= 0) getPreferences(0).edit().putInt("page_${path}", pos).apply()
+                    if (pos >= 0) getPreferences(0).edit().putInt(positionKey, pos).apply()
                 }
             }
         })
+    }
+
+    private fun queryDisplayName(uri: Uri): String? = try {
+        contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+            val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (index >= 0 && cursor.moveToFirst()) cursor.getString(index) else null
+        }
+    } catch (e: Exception) {
+        null
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean { menuInflater.inflate(R.menu.pdf_viewer, menu); return true }

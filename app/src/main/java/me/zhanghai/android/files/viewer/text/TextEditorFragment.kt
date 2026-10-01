@@ -339,7 +339,6 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
     private val searchHandler = android.os.Handler(android.os.Looper.getMainLooper())
     private var searchBackCallback: OnBackPressedCallback? = null
     private var searchQueryDispatched: String? = null
-    private var searchJumpedToFirstMatch = false
     private val liveSearchRunnable = Runnable { runSearch() }
 
     private val isSearchBarVisible: Boolean
@@ -362,14 +361,14 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             val isEnter = event != null && event.keyCode == android.view.KeyEvent.KEYCODE_ENTER &&
                 event.action == android.view.KeyEvent.ACTION_DOWN
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH || isEnter) {
-                goToSearchMatch(true)
+                jumpToSearchMatch(true)
                 true
             } else {
                 false
             }
         }
-        bar.searchBarNext.setOnClickListener { goToSearchMatch(true) }
-        bar.searchBarPrevious.setOnClickListener { goToSearchMatch(false) }
+        bar.searchBarNext.setOnClickListener { jumpToSearchMatch(true) }
+        bar.searchBarPrevious.setOnClickListener { jumpToSearchMatch(false) }
         bar.searchBarClose.setOnClickListener { closeSearchBar() }
     }
 
@@ -411,6 +410,11 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         }
     }
 
+    // Live search: as the user types, matches are highlighted and counted, but the editor's
+    // cursor/scroll position is never touched here. Jumping to a match only ever happens in
+    // jumpToSearchMatch(), triggered explicitly by Enter or the next/previous arrows. This also
+    // means the search bar is never dismissed or disrupted while there happen to be zero matches
+    // for whatever has been typed so far — it just keeps showing "0" until the text changes.
     private fun runSearch() {
         if (!isSearchBarVisible) return
         val query = currentSearchQuery()
@@ -424,25 +428,38 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         try {
             searcher.search(query, SearchOptions(SearchOptions.TYPE_NORMAL, true, null))
             searchQueryDispatched = query
-            searchJumpedToFirstMatch = false
-            // Sora computes matches on a background thread, so we cannot jump to the first
-            // result the instant search() returns: on a larger file, or right after fast
-            // typing keeps the main thread busy, the results simply are not ready yet and an
-            // immediate gotoNext() silently does nothing. Poll for real progress instead of
-            // guessing a fixed delay, so this keeps working no matter how long a search takes.
-            pollSearchResult(query, 0)
         } catch (_: Exception) {
-            updateSearchCount()
         }
+        updateSearchCount()
+        // The match count becomes available only after Sora finishes computing it on a
+        // background thread, so refresh the label a bit later too (no cursor movement involved).
+        searchHandler.postDelayed({ if (currentSearchQuery() == query) updateSearchCount() }, 150)
     }
 
-    // Keeps retrying gotoNext() until it actually moves the cursor (proof the search finished),
-    // the match count getter (if available on this library version) confirms zero results, or a
-    // generous ceiling is hit. This never skips ahead to the second match: gotoNext() is called
-    // at most once per attempt and only while we have not yet confirmed a successful first jump.
-    private fun pollSearchResult(query: String, attempt: Int) {
+    // Jumps to the next/previous match. Only ever called from an explicit user action (Enter,
+    // the IME search action, or the arrow buttons) — never automatically while typing.
+    private fun jumpToSearchMatch(next: Boolean) {
+        if (!isSearchBarVisible) return
+        val query = currentSearchQuery()
+        if (query.isEmpty()) return
+        if (searchQueryDispatched != query) {
+            // The debounced live search has not caught up with the latest text yet (e.g. Enter
+            // was pressed faster than the debounce delay); dispatch it right now before jumping.
+            try {
+                binding.textEdit.searcher.search(query, SearchOptions(SearchOptions.TYPE_NORMAL, true, null))
+                searchQueryDispatched = query
+            } catch (_: Exception) {
+                return
+            }
+        }
+        pollAndJump(query, next, 0)
+    }
+
+    // Keeps retrying gotoNext()/gotoPrevious() until it actually moves the cursor (proof the
+    // search finished), the match count getter (if available on this library version) confirms
+    // zero results, or a generous ceiling is hit.
+    private fun pollAndJump(query: String, next: Boolean, attempt: Int) {
         if (!isSearchBarVisible || searchQueryDispatched != query || currentSearchQuery() != query) return
-        if (searchJumpedToFirstMatch) return
         updateSearchCount()
         val count = searcherInt("getMatchedPositionCount")
         if (count == 0) {
@@ -453,39 +470,22 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         val beforeLine = cursor.leftLine
         val beforeColumn = cursor.leftColumn
         try {
-            binding.textEdit.searcher.gotoNext()
-        } catch (_: Exception) {
-        }
-        val moved = cursor.leftLine != beforeLine || cursor.leftColumn != beforeColumn
-        if (moved) {
-            searchJumpedToFirstMatch = true
-            updateSearchCount()
-            return
-        }
-        // Not ready yet (or gotoNext() genuinely could not move because there are 0 matches and
-        // the count getter is unavailable on this library version). Keep trying for up to ~3s.
-        if (attempt < 40) {
-            searchHandler.postDelayed({ pollSearchResult(query, attempt + 1) }, 75)
-        } else {
-            updateSearchCount()
-        }
-    }
-
-    private fun goToSearchMatch(next: Boolean) {
-        if (!isSearchBarVisible) return
-        val query = currentSearchQuery()
-        if (query.isEmpty()) return
-        if (searchQueryDispatched != query) {
-            runSearch()
-            return
-        }
-        try {
             val searcher = binding.textEdit.searcher
             if (next) searcher.gotoNext() else searcher.gotoPrevious()
         } catch (_: Exception) {
         }
-        updateSearchCount()
-        searchHandler.postDelayed({ updateSearchCount() }, 60)
+        val moved = cursor.leftLine != beforeLine || cursor.leftColumn != beforeColumn
+        if (moved) {
+            updateSearchCount()
+            return
+        }
+        // Not ready yet (or it genuinely could not move because there are 0 matches and the
+        // count getter is unavailable on this library version). Keep trying for up to ~3s.
+        if (attempt < 40) {
+            searchHandler.postDelayed({ pollAndJump(query, next, attempt + 1) }, 75)
+        } else {
+            updateSearchCount()
+        }
     }
 
     private fun updateSearchCount() {

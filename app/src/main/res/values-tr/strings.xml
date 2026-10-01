@@ -630,6 +630,7 @@
     <string name="about_author_github_title">GitHub\'da takip edin</string>
     <string name="about_author_twitter_title">Twitter\'da takip edin</string>
 <string name="pdf_viewer_page_count">%1$d sayfa</string>
+<string name="pdf_viewer_untitled">PDF belgesi</string>
     <string name="pdf_viewer_go_to_page">Sayfaya git</string>
     <string name="pdf_viewer_page_number">Sayfa numarası</string>
     <string name="pdf_viewer_night_mode">Gece modu</string>

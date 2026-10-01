@@ -68,7 +68,21 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
-        <activity android:name="me.zhanghai.android.files.viewer.pdf.PdfViewerActivity" android:exported="false" />
+        <activity android:name="me.zhanghai.android.files.viewer.pdf.PdfViewerActivity" android:exported="true">
+            <!-- Lets other apps' "Open with" / "view" system chooser offer Material Files'
+                 own PDF viewer, not just our internal extraPath launches. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content" android:mimeType="application/pdf" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" android:mimeType="application/pdf" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="me.zhanghai.android.files.filelist.FileListActivity"

@@ -128,33 +128,20 @@ class ImageEditorActivity : AppActivity() {
 
     private var pendingBytes: ByteArray? = null
     private var pendingCropPath: Path? = null
+    // The temp file (under cacheDir/ucrop) that "path" currently points to, if any, so it can be
+    // cleaned up once superseded by a newer crop. Never points at the user's original file.
+    private var tempCropPath: Path? = null
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CROP) {
             if (resultCode == RESULT_OK) {
-                val output = pendingCropPath
-                if (output != null) {
-                    val intent = FileListActivity.CreateFileContract().createIntent(
-                        this, Triple(MimeType.IMAGE_ANY, path.fileName.toString().substringBeforeLast('.') + "_crop.png", null)
-                    )
-                    startActivityForResult(intent, REQUEST_SAVE_CROP)
-                }
+                pendingCropPath?.let { loadCroppedResult(it) }
             } else {
                 val error = data?.let { UCrop.getError(it) }
                 error?.printStackTrace()
-                pendingCropPath = null
+                pendingCropPath?.let { try { it.deleteIfExists() } catch (_: Exception) {} }
             }
-            return
-        }
-        if (requestCode == REQUEST_SAVE_CROP && resultCode == RESULT_OK) {
-            val target = data?.extraPath
-            val output = pendingCropPath
-            if (target != null && output != null) {
-                contentResolver.openInputStream(output.fileProviderUri)?.use { input ->
-                    FileJobService.write(target, input.readBytes(), this) { }
-                }
-            }
-            output?.let { try { it.deleteIfExists() } catch (_: Exception) {} }
             pendingCropPath = null
             return
         }
@@ -165,10 +152,44 @@ class ImageEditorActivity : AppActivity() {
         }
     }
 
-    override fun onDestroy() { bitmap?.recycle(); super.onDestroy() }
+    // Loads the cropped result straight back into the editor instead of forcing an immediate
+    // "save as" step, so cropping behaves like the other tools here: apply and keep editing.
+    // The user still explicitly saves afterward via "Save edited copy".
+    private fun loadCroppedResult(croppedFile: Path) {
+        try {
+            val newBitmap = contentResolver.openInputStream(croppedFile.fileProviderUri)?.use {
+                BitmapFactory.decodeStream(it)
+            } ?: return
+            bitmap?.recycle()
+            bitmap = newBitmap
+            image.setImageBitmap(newBitmap)
+            // The cropped file reflects "path" as it was before this crop; any rotate/flip/
+            // grayscale already applied to the on-screen preview only affected the preview, not
+            // what uCrop cropped, so those start fresh again on top of the freshly cropped image.
+            image.rotation = 0f
+            image.scaleX = 1f
+            image.scaleY = 1f
+            image.colorFilter = null
+            changed = true
+            // Point further edits (another crop, save copy) at this cropped file so edits chain
+            // correctly instead of re-cropping the original every time. Clean up the previous
+            // temp crop file, if any — never the user's original file.
+            tempCropPath?.let { try { it.deleteIfExists() } catch (_: Exception) {} }
+            tempCropPath = croppedFile
+            path = croppedFile
+        } catch (e: Throwable) {
+            e.printStackTrace()
+            try { croppedFile.deleteIfExists() } catch (_: Exception) {}
+        }
+    }
+
+    override fun onDestroy() {
+        bitmap?.recycle()
+        tempCropPath?.let { try { it.deleteIfExists() } catch (_: Exception) {} }
+        super.onDestroy()
+    }
 
     companion object {
         private const val REQUEST_CROP = 9902
-        private const val REQUEST_SAVE_CROP = 9903
     }
 }
