@@ -859,8 +859,12 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             try {
                 val reference = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { path.readAllBytes().toString(Charsets.UTF_8) }
                 val target = binding.textEdit.text.toString()
-                val result = if (argsFile.fileName.toString().lowercase().endsWith(".xml") && path.fileName.toString().lowercase().endsWith(".xml")) {
+                val refName = argsFile.fileName.toString().lowercase()
+                val tgtName = path.fileName.toString().lowercase()
+                val result = if (refName.endsWith(".xml") && tgtName.endsWith(".xml")) {
                     TextCompareSynchronizer.synchronize(reference, target)
+                } else if (refName.endsWith(".json") && tgtName.endsWith(".json")) {
+                    JsonCompareSynchronizer.synchronize(reference, target)
                 } else null
                 if (result == null) {
                     showToast(R.string.text_editor_compare_no_sync)

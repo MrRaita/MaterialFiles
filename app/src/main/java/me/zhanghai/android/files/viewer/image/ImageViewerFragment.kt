@@ -9,9 +9,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +17,7 @@ import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import java8.nio.file.Path
 import java8.nio.file.attribute.BasicFileAttributes
@@ -50,8 +48,8 @@ import me.zhanghai.android.files.util.withChooser
 import me.zhanghai.android.systemuihelper.SystemUiHelper
 import java.io.IOException
 
-// Google Photos style viewer: title-only top bar, Share/Delete at the bottom, and swiping up on
-// the image reveals a bottom-sheet info panel (name, size, date, path). No overflow menu.
+// Google Photos style viewer: title-only top bar, borderless icon-only Share/Info/Delete
+// buttons at the bottom. No overflow menu.
 class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
     private val args by args<Args>()
     private val argsPaths by lazy { args.intent.extraPathList }
@@ -63,10 +61,6 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
     private lateinit var systemUiHelper: SystemUiHelper
 
     private lateinit var adapter: ImageViewerAdapter
-
-    private lateinit var infoPanelBehavior: BottomSheetBehavior<androidx.core.widget.NestedScrollView>
-
-    private lateinit var swipeDetector: GestureDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,52 +124,12 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     updateTitle()
-                    updateInfoPanel()
                 }
             })
         }
         binding.shareButton.setOnClickListener { share() }
+        binding.infoButton.setOnClickListener { showInfoDialog() }
         binding.deleteButton.setOnClickListener { confirmDelete() }
-
-        infoPanelBehavior = BottomSheetBehavior.from(binding.infoPanel).apply {
-            isHideable = true
-            peekHeight = 0
-            state = BottomSheetBehavior.STATE_HIDDEN
-        }
-        swipeDetector = GestureDetector(
-            requireContext(),
-            object : GestureDetector.SimpleOnGestureListener() {
-                override fun onFling(
-                    e1: MotionEvent?,
-                    e2: MotionEvent,
-                    velocityX: Float,
-                    velocityY: Float
-                ): Boolean {
-                    if (e1 == null) return false
-                    val deltaX = e2.x - e1.x
-                    val deltaY = e2.y - e1.y
-                    // Require the gesture to be mostly vertical so it doesn't fight page-swiping.
-                    if (kotlin.math.abs(deltaY) < kotlin.math.abs(deltaX)) return false
-                    return if (deltaY < -60 && velocityY < -300) {
-                        infoPanelBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                        true
-                    } else if (deltaY > 60 && velocityY > 300) {
-                        infoPanelBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                        true
-                    } else {
-                        false
-                    }
-                }
-            }
-        )
-        // Attach directly to the ViewPager2 itself (not an internal child) so this always sees
-        // the full touch stream through its own dispatchTouchEvent, regardless of how its
-        // internal RecyclerView/page views are structured. Returning false never consumes the
-        // touch: paging, panning and zooming keep working exactly as before.
-        binding.viewPager.setOnTouchListener { _, event ->
-            swipeDetector.onTouchEvent(event)
-            false
-        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -188,7 +142,6 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
         }
 
         updateTitle()
-        updateInfoPanel()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -221,7 +174,6 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
             binding.viewPager.currentItem = paths.lastIndex
         }
         updateTitle()
-        updateInfoPanel()
         // Work around blank screen due to ViewPager2.PageTransformer not being called (and thus the
         // next item keeps its 0 alpha) when we have offscreenPageLimit = 1.
         binding.viewPager.doOnPreDraw { binding.viewPager.requestTransform() }
@@ -231,11 +183,10 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
         requireActivity().title = currentPath.fileName.toString()
     }
 
-    private fun updateInfoPanel() {
-        infoPanelBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+    private fun showInfoDialog() {
         val path = currentPath
         val context = requireContext()
-        binding.infoName.text = path.fileName.toString()
+        var details = ""
         try {
             val attributes = path.readAttributes(BasicFileAttributes::class.java)
             val size = attributes.size().asFileSize().formatHumanReadable(context)
@@ -251,12 +202,16 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
                     null
                 }
             }.getOrNull()
-            binding.infoDetails.text = listOfNotNull(dimensions, size, date).joinToString("  ·  ")
+            details = listOfNotNull(dimensions, size, date).joinToString("\n") + "\n\n" + path.toString()
         } catch (e: Exception) {
             e.printStackTrace()
-            binding.infoDetails.text = null
+            details = path.toString()
         }
-        binding.infoPath.text = path.toString()
+        MaterialAlertDialogBuilder(context)
+            .setTitle(path.fileName.toString())
+            .setMessage(details)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     private fun share() {
