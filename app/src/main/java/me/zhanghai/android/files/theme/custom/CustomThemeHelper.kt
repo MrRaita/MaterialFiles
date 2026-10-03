@@ -26,12 +26,6 @@ object CustomThemeHelper {
     fun initialize(application: Application) {
         application.registerActivityLifecycleCallbacks(object : SimpleActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                // Bundled third-party library activities (e.g. UCropActivity from the local
-                // ucrop module) run in-process but cannot reasonably extend our own AppActivity
-                // base class, so they are exempt from the custom dynamic theming contract below.
-                if (!activity.javaClass.name.startsWith("me.zhanghai.android.files.")) {
-                    return
-                }
                 check(activityBaseThemes.containsKey(activity)) {
                     "Activity must extend AppActivity: $activity"
                 }

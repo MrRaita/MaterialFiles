@@ -629,21 +629,12 @@
     <string name="about_author_name_title">Hai Zhang</string>
     <string name="about_author_github_title">GitHub\'da takip edin</string>
     <string name="about_author_twitter_title">Twitter\'da takip edin</string>
+<string name="pdf_viewer_title">Material Files PDF Görüntüleyici</string>
 <string name="pdf_viewer_page_count">%1$d sayfa</string>
 <string name="pdf_viewer_untitled">PDF belgesi</string>
     <string name="pdf_viewer_go_to_page">Sayfaya git</string>
     <string name="pdf_viewer_page_number">Sayfa numarası</string>
-    <string name="pdf_viewer_night_mode">Gece modu</string>
-
-    <string name="image_editor_edit">Görseli düzenle</string>
-    <string name="image_editor_crop">Kırp</string>
-    <string name="image_editor_rotate_left">Sola döndür</string>
-    <string name="image_editor_rotate_right">Sağa döndür</string>
-    <string name="image_editor_flip_horizontal">Yatay çevir</string>
-    <string name="image_editor_flip_vertical">Dikey çevir</string>
-    <string name="image_editor_grayscale">Gri tonlama</string>
-    <string name="image_editor_save_copy">Düzenlenmiş kopyayı kaydet</string>
-    <string name="settings_editor_appearance_title">Düzenleyici görünümü</string>
+    <string name="pdf_viewer_night_mode">Gece modu</string>    <string name="settings_editor_appearance_title">Düzenleyici görünümü</string>
     <string name="settings_editor_appearance_summary">Tema, yazı tipi ve renkleri özelleştir</string>
     <string name="settings_editor_theme_title">Renk teması</string>
     <string name="settings_editor_font_family_title">Yazı tipi</string>

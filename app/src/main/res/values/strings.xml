@@ -885,21 +885,12 @@
 
     <string name="shortcut_downloads_title" translatable="false">@string/navigation_standard_directory_downloads</string>
     <string name="shortcut_ftp_server_title" translatable="false">@string/ftp_server_title</string>
+<string name="pdf_viewer_title">Material Files PDF Viewer</string>
 <string name="pdf_viewer_page_count">%1$d pages</string>
 <string name="pdf_viewer_untitled">PDF document</string>
     <string name="pdf_viewer_go_to_page">Go to page</string>
     <string name="pdf_viewer_page_number">Page number</string>
-    <string name="pdf_viewer_night_mode">Night mode</string>
-
-    <string name="image_editor_edit">Edit image</string>
-    <string name="image_editor_crop">Crop</string>
-    <string name="image_editor_rotate_left">Rotate left</string>
-    <string name="image_editor_rotate_right">Rotate right</string>
-    <string name="image_editor_flip_horizontal">Flip horizontally</string>
-    <string name="image_editor_flip_vertical">Flip vertically</string>
-    <string name="image_editor_grayscale">Grayscale</string>
-    <string name="image_editor_save_copy">Save edited copy</string>
-    <string name="settings_editor_appearance_title">Editor appearance</string>
+    <string name="pdf_viewer_night_mode">Night mode</string>    <string name="settings_editor_appearance_title">Editor appearance</string>
     <string name="settings_editor_appearance_summary">Customize editor themes, fonts and colors</string>
     <string name="settings_editor_theme_title">Color theme</string>
     <string name="settings_editor_font_family_title">Font family</string>
