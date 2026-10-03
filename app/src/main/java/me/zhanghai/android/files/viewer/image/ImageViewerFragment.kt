@@ -152,11 +152,14 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
                     velocityY: Float
                 ): Boolean {
                     if (e1 == null) return false
+                    val deltaX = e2.x - e1.x
                     val deltaY = e2.y - e1.y
-                    return if (deltaY < -100 && velocityY < -600) {
+                    // Require the gesture to be mostly vertical so it doesn't fight page-swiping.
+                    if (kotlin.math.abs(deltaY) < kotlin.math.abs(deltaX)) return false
+                    return if (deltaY < -60 && velocityY < -300) {
                         infoPanelBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                         true
-                    } else if (deltaY > 100 && velocityY > 600) {
+                    } else if (deltaY > 60 && velocityY > 300) {
                         infoPanelBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                         true
                     } else {
@@ -165,9 +168,11 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
                 }
             }
         )
-        // Never consume the touch: let the ViewPager/PhotoView keep handling paging, panning and
-        // zooming as usual. We only ever look at the gesture to detect a vertical swipe fling.
-        binding.viewPager.getChildAt(0)?.setOnTouchListener { _, event ->
+        // Attach directly to the ViewPager2 itself (not an internal child) so this always sees
+        // the full touch stream through its own dispatchTouchEvent, regardless of how its
+        // internal RecyclerView/page views are structured. Returning false never consumes the
+        // touch: paging, panning and zooming keep working exactly as before.
+        binding.viewPager.setOnTouchListener { _, event ->
             swipeDetector.onTouchEvent(event)
             false
         }
