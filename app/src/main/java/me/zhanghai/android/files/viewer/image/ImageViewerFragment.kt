@@ -6,6 +6,7 @@
 package me.zhanghai.android.files.viewer.image
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
@@ -29,6 +30,7 @@ import me.zhanghai.android.files.file.asFileSize
 import me.zhanghai.android.files.file.formatShort
 import me.zhanghai.android.files.file.fileProviderUri
 import me.zhanghai.android.files.provider.common.delete
+import me.zhanghai.android.files.provider.common.newOutputStream
 import me.zhanghai.android.files.provider.common.readAttributes
 import me.zhanghai.android.files.ui.DepthPageTransformer
 import me.zhanghai.android.files.util.ParcelableArgs
@@ -186,11 +188,16 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
     private fun showInfoDialog() {
         val path = currentPath
         val context = requireContext()
-        var details = ""
+        val view = LayoutInflater.from(context).inflate(R.layout.image_viewer_info_dialog, null)
+        view.findViewById<android.widget.TextView>(R.id.infoNameValue).text = path.fileName.toString()
+        view.findViewById<android.widget.TextView>(R.id.infoPathValue).text = path.toString()
+        val dimensionsView = view.findViewById<android.widget.TextView>(R.id.infoDimensionsValue)
+        val sizeView = view.findViewById<android.widget.TextView>(R.id.infoSizeValue)
+        val dateView = view.findViewById<android.widget.TextView>(R.id.infoDateValue)
         try {
             val attributes = path.readAttributes(BasicFileAttributes::class.java)
-            val size = attributes.size().asFileSize().formatHumanReadable(context)
-            val date = attributes.lastModifiedTime().toInstant().formatShort(context)
+            sizeView.text = attributes.size().asFileSize().formatHumanReadable(context)
+            dateView.text = attributes.lastModifiedTime().toInstant().formatShort(context)
             val dimensions = runCatching {
                 val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                 context.contentResolver.openInputStream(path.fileProviderUri)?.use {
@@ -202,16 +209,50 @@ class ImageViewerFragment : Fragment(), ConfirmDeleteDialogFragment.Listener {
                     null
                 }
             }.getOrNull()
-            details = listOfNotNull(dimensions, size, date).joinToString("\n") + "\n\n" + path.toString()
+            dimensionsView.text = dimensions ?: "—"
         } catch (e: Exception) {
             e.printStackTrace()
-            details = path.toString()
+            sizeView.text = "—"
+            dateView.text = "—"
+            dimensionsView.text = "—"
         }
         MaterialAlertDialogBuilder(context)
             .setTitle(path.fileName.toString())
-            .setMessage(details)
+            .setView(view)
             .setPositiveButton(android.R.string.ok, null)
+            .setNegativeButton(R.string.image_viewer_strip_metadata) { _, _ -> stripMetadata(path) }
             .show()
+    }
+
+    // Re-encodes the image from its decoded pixels, which drops all EXIF/XMP metadata (GPS
+    // location, camera/device info, timestamps embedded in the file, etc.) since none of that is
+    // carried by a Bitmap. The file itself is overwritten in place.
+    private fun stripMetadata(path: Path) {
+        val context = requireContext()
+        try {
+            val bitmap = context.contentResolver.openInputStream(path.fileProviderUri)?.use {
+                BitmapFactory.decodeStream(it)
+            } ?: throw IOException("Couldn't decode image")
+            val name = path.fileName.toString().lowercase()
+            val format = when {
+                name.endsWith(".png") -> Bitmap.CompressFormat.PNG
+                name.endsWith(".webp") -> Bitmap.CompressFormat.WEBP_LOSSLESS
+                else -> Bitmap.CompressFormat.JPEG
+            }
+            val quality = if (format == Bitmap.CompressFormat.JPEG) 95 else 100
+            path.newOutputStream(
+                java8.nio.file.StandardOpenOption.WRITE, java8.nio.file.StandardOpenOption.TRUNCATE_EXISTING
+            ).use { output ->
+                if (!bitmap.compress(format, quality, output)) throw IOException("Compress failed")
+            }
+            bitmap.recycle()
+            adapter.replace(paths)
+            binding.viewPager.doOnPreDraw { binding.viewPager.requestTransform() }
+            showToast(R.string.image_viewer_strip_metadata_success)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast(R.string.image_viewer_strip_metadata_failure)
+        }
     }
 
     private fun share() {

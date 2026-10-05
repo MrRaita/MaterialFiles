@@ -40,6 +40,14 @@
     <string name="select_all">Tümünü seç</string>
     <string name="share">Paylaş</string>
     <string name="image_viewer_info">Bilgi</string>
+    <string name="image_viewer_info_name">İsim</string>
+    <string name="image_viewer_info_dimensions">Ölçü</string>
+    <string name="image_viewer_info_size">Boyut</string>
+    <string name="image_viewer_info_date">Tarih</string>
+    <string name="image_viewer_info_path">Konum</string>
+    <string name="image_viewer_strip_metadata">Meta verileri temizle</string>
+    <string name="image_viewer_strip_metadata_success">Meta veri temizlendi</string>
+    <string name="image_viewer_strip_metadata_failure">Meta veri temizlenemedi</string>
     <string name="show">Göster</string>
     <string name="skip">Atla</string>
     <string name="stop">Durdur</string>
