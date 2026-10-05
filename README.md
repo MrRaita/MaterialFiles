@@ -1,3 +1,11 @@
+# ⚠️ Status: Under development and testing.
+
+> This repository is currently being actively modified and tested and is not stable yet.
+>
+> Once development is complete, the necessary signing certificates and dependencies (keystore, GitHub Secrets, etc.) will be added to the repository, and the build/release process will be updated accordingly.
+>
+> Until then, any APKs produced are for testing purposes only.
+
 # Material Files
 
 [本文中文版](README_zh-CN.md)
