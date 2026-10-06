@@ -1,0 +1,110 @@
+name: Prebuild
+
+# Her push'ta otomatik çalışır, versiyon numarasını bu derlemeye özel artırır, senin
+# GitHub Secrets'a koyacağın GERÇEK imza anahtarınla imzalar (debug anahtarı DEĞİL) ve
+# üretilen APK'yı bu çalıştırmanın kendi "Artifacts" bölümüne bırakır. Hiçbir GitHub
+# Release/pre-release OLUŞTURMAZ, repoya da hiçbir şey commit etmez — sadece derler.
+# Artifact'ı indirmek için: Actions sekmesi -> ilgili çalıştırma -> Artifacts.
+#
+# ZORUNLU repo secret'ları (Settings -> Secrets and variables -> Actions):
+#   MATERIAL_FILES_KEYSTORE            (material-files.keystore dosyasının base64 hali:
+#                                        base64 -w0 material-files.keystore)
+#   MATERIAL_FILES_KEYSTORE_PASSWORD
+#   MATERIAL_FILES_KEY_PASSWORD
+# Keystore türü PKCS12, key alias'ı "app" — ikisi de aşağıda sabit geçiyor, secret olarak
+# saklanmalarına gerek yok (hassas olan sadece şifreler ve keystore'un kendisi).
+# Bu secret'lar yoksa iş "Decode keystore" adımında net bir hatayla durur.
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: prebuild-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      # app/build.gradle şu an compileSdk=37, compileSdkMinor=2 kullanıyor; bu ikisi birlikte
+      # gerçek paket adı "platforms;android-37.2" demek (düz "android-37" ya da "android-37.0"
+      # DEĞİL). build.gradle'da bu üç değerden biri değişirse buradaki satırı da güncelle.
+      - name: Install required SDK / NDK / CMake components
+        run: |
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER=$(find "$ANDROID_SDK_ROOT/cmdline-tools" -maxdepth 2 -name sdkmanager | head -n1)
+          fi
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" \
+            "platforms;android-37.2" \
+            "build-tools;37.0.0" \
+            "ndk;30.0.16248370" \
+            "cmake;3.22.1"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Set up Gradle (with caching)
+        uses: gradle/actions/setup-gradle@v4
+
+      # versionCode = temel değer + çalıştırma numarası (her derlemede artar, repoya yazılmaz)
+      # versionName = temel sürüm + "-dev.<çalıştırma no>.<kısa commit>"
+      - name: Bump version for this build
+        id: version
+        run: |
+          BASE_CODE=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle | head -n1)
+          BASE_NAME=$(grep -oP "versionName\s+'\K[^']+" app/build.gradle | head -n1)
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          NEW_CODE=$((BASE_CODE + GITHUB_RUN_NUMBER))
+          NEW_NAME="${BASE_NAME}-dev.${GITHUB_RUN_NUMBER}.${SHORT_SHA}"
+          sed -i "s/versionCode ${BASE_CODE}\b/versionCode ${NEW_CODE}/" app/build.gradle
+          sed -i "s/versionName '${BASE_NAME}'/versionName '${NEW_NAME}'/" app/build.gradle
+          echo "version_name=${NEW_NAME}" >> "$GITHUB_OUTPUT"
+          echo "version_code=${NEW_CODE}" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+          echo "Building ${NEW_NAME} (${NEW_CODE})"
+
+      - name: Decode keystore
+        env:
+          MATERIAL_FILES_KEYSTORE: ${{ secrets.MATERIAL_FILES_KEYSTORE }}
+        run: |
+          if [ -z "$MATERIAL_FILES_KEYSTORE" ]; then
+            echo "::error title=İmza secret'ı eksik::MATERIAL_FILES_KEYSTORE repo secret'ı tanımlı değil. Settings -> Secrets and variables -> Actions altına ekle."
+            exit 1
+          fi
+          echo "$MATERIAL_FILES_KEYSTORE" | base64 -d > "$RUNNER_TEMP/material-files.keystore"
+          echo "STORE_FILE=$RUNNER_TEMP/material-files.keystore" >> "$GITHUB_ENV"
+
+      - name: Build release APK
+        env:
+          STORE_TYPE: PKCS12
+          STORE_PASSWORD: ${{ secrets.MATERIAL_FILES_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: app
+          KEY_PASSWORD: ${{ secrets.MATERIAL_FILES_KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Rename APK
+        run: |
+          mkdir -p release-artifacts
+          APK=$(ls app/build/outputs/apk/release/*.apk | head -n1)
+          cp "$APK" "release-artifacts/MaterialFiles-${{ steps.version.outputs.version_name }}.apk"
+
+      - name: Upload APK as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MaterialFiles-${{ steps.version.outputs.version_name }}
+          path: release-artifacts/*.apk
+          retention-days: 14

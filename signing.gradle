@@ -13,8 +13,9 @@ android {
             }
 
             storeFile getString('storeFile', 'STORE_FILE', 'Store file')?.with(rootProject.&file)
+            storeType getString('storeType', 'STORE_TYPE', 'Store type') ?: 'PKCS12'
             storePassword getString('storePassword', 'STORE_PASSWORD', 'Store password')
-            keyAlias getString('keyAlias', 'KEY_ALIAS', 'Key alias')
+            keyAlias getString('keyAlias', 'KEY_ALIAS', 'Key alias') ?: 'app'
             keyPassword getString('keyPassword', 'KEY_PASSWORD', 'Key password')
         }
     }

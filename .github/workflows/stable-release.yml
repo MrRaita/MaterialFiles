@@ -6,7 +6,9 @@ name: Stable Release
 # app/build.gradle'dan okunur, artırılmaz — orada ne yazıyorsa o yayınlanır.
 #
 # ZORUNLU repo secret'ları (prebuild.yml ile aynı):
-#   SIGNING_KEYSTORE_BASE64, SIGNING_STORE_PASSWORD, SIGNING_KEY_ALIAS, SIGNING_KEY_PASSWORD
+#   MATERIAL_FILES_KEYSTORE, MATERIAL_FILES_KEYSTORE_PASSWORD, MATERIAL_FILES_KEY_PASSWORD
+# Keystore türü PKCS12, key alias'ı "app" — ikisi de aşağıda sabit geçiyor, secret olmalarına
+# gerek yok (hassas olan sadece şifreler ve keystore'un kendisi).
 on:
   workflow_dispatch:
 
@@ -59,20 +61,21 @@ jobs:
 
       - name: Decode keystore
         env:
-          SIGNING_KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
+          MATERIAL_FILES_KEYSTORE: ${{ secrets.MATERIAL_FILES_KEYSTORE }}
         run: |
-          if [ -z "$SIGNING_KEYSTORE_BASE64" ]; then
-            echo "::error title=İmza secret'ı eksik::SIGNING_KEYSTORE_BASE64 repo secret'ı tanımlı değil."
+          if [ -z "$MATERIAL_FILES_KEYSTORE" ]; then
+            echo "::error title=İmza secret'ı eksik::MATERIAL_FILES_KEYSTORE repo secret'ı tanımlı değil."
             exit 1
           fi
-          echo "$SIGNING_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
-          echo "STORE_FILE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+          echo "$MATERIAL_FILES_KEYSTORE" | base64 -d > "$RUNNER_TEMP/material-files.keystore"
+          echo "STORE_FILE=$RUNNER_TEMP/material-files.keystore" >> "$GITHUB_ENV"
 
       - name: Build release APK
         env:
-          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          STORE_TYPE: PKCS12
+          STORE_PASSWORD: ${{ secrets.MATERIAL_FILES_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: app
+          KEY_PASSWORD: ${{ secrets.MATERIAL_FILES_KEY_PASSWORD }}
         run: ./gradlew assembleRelease --stacktrace
 
       - name: Rename APK

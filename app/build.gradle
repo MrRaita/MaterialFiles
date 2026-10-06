@@ -35,8 +35,8 @@ android {
         // Not supporting the ACCESS_LOCAL_NETWORK runtime permission yet.
         //noinspection OldTargetApi
         targetSdk 36
-        versionCode 47
-        versionName '1.8.2'
+        versionCode 48
+        versionName '1.8.3'
         resValue 'string', 'app_version', versionName + ' (' + versionCode + ')'
         buildConfigField 'String', 'FILE_PROVIDIER_AUTHORITY', 'APPLICATION_ID + ".file_provider"'
         resValue 'string', 'app_provider_authority', applicationId + '.app_provider'
@@ -72,6 +72,12 @@ android {
         warning 'InvalidPackage', 'MissingTranslation'
     }
     buildTypes {
+        debug {
+            // Debug builds use the SAME "app" signing key as release, so a debug APK can be
+            // installed over a previously-installed release APK (or vice versa) without a
+            // signature mismatch. The key itself is never committed; see signing.gradle.
+            signingConfig signingConfigs.release
+        }
         release {
             minifyEnabled true
             shrinkResources true
