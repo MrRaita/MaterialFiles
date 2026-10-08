@@ -1,0 +1,75 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [ main, master, dev ]
+  pull_request:
+    branches: [ main, master, dev ]
+  schedule:
+    # Her pazartesi 03:00 UTC'de ek olarak taransın (push/PR olmasa bile).
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'java-kotlin' ]
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
+
+      # CodeQL Kotlin/Java analizi için projenin gerçekten derlenmesi gerekiyor (derlenemeyen
+      # kod analiz edilemez). Bu yüzden prebuild.yml/stable-release.yml'deki aynı SDK/NDK
+      # kurulumunu burada da tekrarlıyoruz; imza secret'larına ihtiyaç yok, sadece derleniyor.
+      - name: Install required SDK / NDK / CMake components
+        run: |
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER=$(find "$ANDROID_SDK_ROOT/cmdline-tools" -maxdepth 2 -name sdkmanager | head -n1)
+          fi
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" \
+            "platforms;android-37.2" \
+            "build-tools;37.0.0" \
+            "ndk;30.0.16248370" \
+            "cmake;3.22.1"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Set up Gradle (with caching)
+        uses: gradle/actions/setup-gradle@v4
+
+      # compileDebugSources derler ama paketleme/imzalama adımına hiç girmez — CodeQL'e zaten
+      # sadece derlenmiş bytecode lazım. assembleDebug kullanmıyoruz çünkü debug build type artık
+      # gerçek imza anahtarını istiyor (signing.gradle) ve bu workflow'da o secret'lar yok;
+      # assembleDebug burada paketleme/imzalama aşamasında başarısız olurdu.
+      - name: Build (compile only, no packaging/signing)
+        run: ./gradlew compileDebugSources --stacktrace
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
