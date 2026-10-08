@@ -1,6 +1,7 @@
 package me.zhanghai.android.files.viewer.text
 
 import java.io.File
+import me.zhanghai.android.files.app.application
 import java.io.StringWriter
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -45,7 +46,7 @@ object BinaryTextDecoder {
     }
 
     private fun decodeDex(file: Path, bytes: ByteArray): String {
-        val temp = File.createTempFile("material-files-", ".dex").apply {
+        val temp = File.createTempFile("material-files-", ".dex", application.cacheDir).apply {
             setReadable(false, false); setWritable(false, false)
             setReadable(true, true); setWritable(true, true)
         }
