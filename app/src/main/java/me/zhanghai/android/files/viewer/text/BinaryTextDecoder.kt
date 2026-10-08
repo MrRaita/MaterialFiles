@@ -45,7 +45,10 @@ object BinaryTextDecoder {
     }
 
     private fun decodeDex(file: Path, bytes: ByteArray): String {
-        val temp = File.createTempFile("material-files-", ".dex")
+        val temp = File.createTempFile("material-files-", ".dex").apply {
+            setReadable(false, false); setWritable(false, false)
+            setReadable(true, true); setWritable(true, true)
+        }
         return try {
             temp.writeBytes(bytes)
             val dexFile = DexFileFactory.loadDexFile(temp, Opcodes.getDefault())

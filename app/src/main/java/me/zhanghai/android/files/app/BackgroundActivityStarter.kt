@@ -61,6 +61,9 @@ object BackgroundActivityStarter {
         text: CharSequence?,
         context: Context
     ) {
+        if (intent.component == null && intent.`package` == null) {
+            intent.`package` = context.packageName
+        }
         var pendingIntentFlags = PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_CANCEL_CURRENT
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             pendingIntentFlags = pendingIntentFlags or PendingIntent.FLAG_IMMUTABLE

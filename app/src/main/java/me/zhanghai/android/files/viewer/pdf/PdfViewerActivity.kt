@@ -49,6 +49,10 @@ class PdfViewerActivity : AppActivity() {
             positionKey = "page_$internalPath"
         } else if (intent.action == Intent.ACTION_VIEW && intent.data != null) {
             val uri = intent.data!!
+            if ((uri.scheme != "content" && uri.scheme != "file")
+                || (uri.scheme == "file" && uri.path?.startsWith(applicationInfo.dataDir) == true)) {
+                finish(); return
+            }
             pdfUri = uri
             title = queryDisplayName(uri) ?: uri.lastPathSegment ?: getString(R.string.pdf_viewer_untitled)
             positionKey = "page_$uri"
