@@ -120,7 +120,7 @@ private fun createView(html: String, context: Context): View {
         scrollIndicatorsCompat = (ViewCompat.SCROLL_INDICATOR_TOP
             or ViewCompat.SCROLL_INDICATOR_BOTTOM)
         setBackgroundColor(Color.TRANSPARENT)
-        settings.allowContentAccess = false
+        settings.setAllowContentAccess(false)
         settings.setSupportMultipleWindows(true)
         webChromeClient = object : WebChromeClient() {
             override fun onCreateWindow(
