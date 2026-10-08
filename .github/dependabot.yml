@@ -1,0 +1,20 @@
+version: 2
+updates:
+  # Gradle bağımlılıkları (app/build.gradle, build.gradle vb.) — haftalık kontrol, PR açar.
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+
+  # GitHub Actions workflow'larındaki action sürümleri (actions/checkout@v4 gibi).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "github-actions"
