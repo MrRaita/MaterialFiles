@@ -433,4 +433,14 @@
         <copyright>Copyright The Apache Software Foundation</copyright>
         <license>Apache Software License 2.0</license>
     </notice>
+    <notice>
+        <name>html.tmbundle (HTML grammar)</name>
+        <url>https://github.com/textmate/html.tmbundle</url>
+        <copyright>TextMate bundle contributors. Permission to copy, use, modify, sell and distribute this software is granted. This software is provided "as is" without express or implied warranty, and with no claim as to its suitability for any purpose.</copyright>
+    </notice>
+    <notice>
+        <name>Kotlin TextMate grammar (from sora-editor demo assets)</name>
+        <url>https://github.com/Rosemoe/sora-editor</url>
+        <copyright>Copyright 2020-2026 Rosemoe. Taken unmodified from the sora-editor repository, which is licensed under the GNU Lesser General Public License, version 2.1 or (at your option) any later version. The original author of the grammar is not stated upstream. The license text is in the project repository (LICENSES/LGPL-2.1.txt).</copyright>
+    </notice>
 </notices>

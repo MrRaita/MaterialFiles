@@ -18,6 +18,7 @@ Full license texts are in [`LICENSES/`](LICENSES/). The list shown inside the ap
 | Component | License | Notes |
 |---|---|---|
 | [sora-editor](https://github.com/Rosemoe/sora-editor) (`editor`, `language-textmate`) 0.24.6 | LGPL-2.1-or-later | Copyright 2020-2026 Rosemoe. Unmodified library, used through its public API. Text: `LICENSES/LGPL-2.1.txt` |
+| [Eclipse tm4e](https://github.com/eclipse-tm4e/tm4e) core (bundled inside sora-editor `language-textmate`) | EPL-2.0 | Source: https://github.com/eclipse-tm4e/tm4e and https://github.com/Rosemoe/sora-editor . Text: `LICENSES/EPL-2.0.txt` (run `fetch-licenses.sh`) |
 | Gson, SnakeYAML Engine, Joni, JCodings (transitive via language-textmate) | Apache-2.0 / Apache-2.0 / MIT / MIT | |
 | [jcifs-ng](https://github.com/AgNO3/jcifs-ng) | LGPL-2.1-or-later | Copyright AgNO3 GmbH & Co. KG |
 | [AndroidRetroFile](https://github.com/zhanghai/AndroidRetroFile) | GPL-2.0 with Classpath Exception | Copyright Hai Zhang |
@@ -26,6 +27,8 @@ Full license texts are in [`LICENSES/`](LICENSES/). The list shown inside the ap
 | sshj, smbj, commons-net, Apache FtpServer, Apache MINA, Guava, Coil, AndroidX, Material Components, Kotlin, libsu, PhotoView, AndroidSVG, SubsamplingScaleImageView and others | Apache-2.0 | Text: `LICENSES/Apache-2.0.txt` |
 | Bouncy Castle, Shizuku-API, RikkaX, SLF4J Android | MIT | See MIT text below |
 | smbj-rpc (dcerpc) | BSD-3-Clause | |
+| PreferenceX, asn-one, Apache Commons IO, OkHttp, Okio, desugar_jdk_libs | Apache-2.0 | desugar_jdk_libs also contains OpenJDK parts (GPL-2.0 with Classpath Exception) |
+| mbassador | MIT | Transitive via SMBJ |
 
 The complete, per-library list with copyright lines is in `app/src/main/res/raw/licenses.xml`.
 
@@ -40,10 +43,10 @@ not covered by the GPL, and are not sold separately. Their license texts are in
 | JetBrains Mono | 2.304 | Copyright 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono) | none declared |
 | Fira Code | 6.002 | Copyright 2014-2021 The Fira Code Project Authors (https://github.com/tonsky/FiraCode) | see upstream license |
 | Source Code Pro | 2.042 | Copyright 2023 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source' | 'Source' |
-| Cascadia Code | 2407.024 | Copyright Microsoft Corporation | 'Cascadia Code' |
+| Cascadia Code | 2407.024 | Copyright (c) 2019 - Present, Microsoft Corporation | 'Cascadia Code' |
 
-"JetBrains Mono" is a trademark of JetBrains s.r.o.; "Fira Mono" of The Mozilla Corporation; "Source" of
-Adobe; "Cascadia Code" of the Microsoft group of companies.
+"JetBrains Mono" is a trademark of JetBrains s.r.o.; "Source" of Adobe; "Cascadia Code" of the Microsoft
+group of companies. Fira Code is based on Fira Mono (Mozilla); no font is renamed or modified here.
 
 ## TextMate grammars (`app/src/main/assets/textmate/`)
 
@@ -54,7 +57,8 @@ Adobe; "Cascadia Code" of the Microsoft group of companies.
 | Python | https://github.com/MagicStack/MagicPython | MIT, Copyright (c) 2015-present MagicStack Inc. |
 | Markdown | https://github.com/microsoft/vscode-markdown-tm-grammar | MIT, Copyright (c) Microsoft 2018 |
 | Lua | https://github.com/sumneko/lua.tmbundle | MIT, Copyright (c) 2022 最萌小汐 |
-| HTML | https://github.com/textmate/html.tmbundle | TextMate bundle permissive notice (see the upstream repository; license text pending verification) |
+| HTML | https://github.com/textmate/html.tmbundle | Permissive TextMate bundle notice: "Permission to copy, use, modify, sell and distribute this software is granted. ... provided \"as is\" ..." (quoted in `app/src/main/assets/textmate/LICENSES/html.tmbundle-license.txt`) |
+| Kotlin | Copied from the sora-editor demo app assets (`app/src/main/assets/textmate/kotlin/`) | Distributed there under LGPL-2.1-or-later; original grammar author not stated upstream |
 
 The remaining grammars (CSS, Gradle, JSON, properties, shell, smali, SQL, TOML, XML) are simple
 originals written for this project and fall under the project's GPL-3.0-or-later license.
