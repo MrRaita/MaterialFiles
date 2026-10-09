@@ -23,6 +23,7 @@ get https://raw.githubusercontent.com/MagicStack/MagicPython/master/LICENSE     
 get https://raw.githubusercontent.com/microsoft/vscode-markdown-tm-grammar/main/LICENSE.txt      $T/vscode-markdown-tm-grammar-MIT.txt
 get https://raw.githubusercontent.com/sumneko/lua.tmbundle/master/LICENSE                        $T/lua.tmbundle-MIT.txt
 get https://raw.githubusercontent.com/zhanghai/AndroidRetroFile/master/LICENSE                   LICENSES/AndroidRetroFile-GPL-2.0-with-Classpath-Exception.txt
+get https://raw.githubusercontent.com/eclipse-tm4e/tm4e/main/LICENSE                              LICENSES/EPL-2.0.txt
 echo
 [ $FAIL = 0 ] && echo "Hepsi indirildi." || echo "Bazı dosyalar inmedi; ağ/URL kontrol edip tekrar çalıştır."
 exit $FAIL

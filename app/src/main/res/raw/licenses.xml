@@ -400,4 +400,37 @@
         <copyright>Copyright The Android Open Source Project; includes parts derived from OpenJDK (GPL v2 with Classpath Exception) and ThreeTen-Backport (BSD 3-Clause)</copyright>
         <license>Apache Software License 2.0</license>
     </notice>
+    <notice>
+        <name>Eclipse tm4e (TextMate engine, bundled via sora-editor)</name>
+        <url>https://github.com/eclipse-tm4e/tm4e</url>
+        <copyright>Copyright (c) Eclipse tm4e contributors. Licensed under the Eclipse Public License 2.0 (https://www.eclipse.org/legal/epl-2.0/). Source code: https://github.com/eclipse-tm4e/tm4e and https://github.com/Rosemoe/sora-editor. The full license text is in the project repository (LICENSES/EPL-2.0.txt).</copyright>
+    </notice>
+
+    <notice>
+        <name>PreferenceX</name>
+        <url>https://github.com/takisoft/preferencex-android</url>
+        <copyright>Copyright 2016 Gergely Kőrössy</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>mbassador</name>
+        <url>https://github.com/bennidi/mbassador</url>
+        <copyright>Copyright (c) 2012 Benjamin Diedrichsen</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>asn-one</name>
+        <url>https://github.com/hierynomus/asn-one</url>
+        <copyright>Copyright 2016 Jeroen van Erp</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Apache Commons IO</name>
+        <url>https://commons.apache.org/proper/commons-io/</url>
+        <copyright>Copyright The Apache Software Foundation</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
 </notices>
