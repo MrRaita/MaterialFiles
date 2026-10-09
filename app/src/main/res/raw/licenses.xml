@@ -208,8 +208,7 @@
     <notice>
         <name>AndroidRetroFile (GPL 2.0 with Classpath Exception)</name>
         <url>https://github.com/zhanghai/AndroidRetroFile</url>
-        <copyright>Copyright 2018 Hai Zhang</copyright>
-        <license>GNU General Public License 2.0</license>
+        <copyright>Copyright 2018 Hai Zhang. Licensed under the GNU General Public License, version 2 only, with the Classpath Exception (https://www.gnu.org/software/classpath/license.html). The full text is in the project repository (LICENSES/GPL-2.0.txt).</copyright>
     </notice>
 
     <notice>
@@ -222,8 +221,7 @@
     <notice>
         <name>android-retrostreams</name>
         <url>https://github.com/retrostreams/android-retrostreams</url>
-        <copyright>Copyright 1994 Oracle and/or its affiliates</copyright>
-        <license>GNU General Public License 2.0</license>
+        <copyright>Copyright 1994 Oracle and/or its affiliates. Licensed under the GNU General Public License, version 2 only, with the Classpath Exception (https://www.gnu.org/software/classpath/license.html). The full text is in the project repository (LICENSES/GPL-2.0.txt).</copyright>
     </notice>
 
     <notice>
@@ -381,5 +379,25 @@
         <url>https://github.com/sumneko/lua.tmbundle</url>
         <copyright>Copyright 2022 最萌小汐</copyright>
         <license>MIT License</license>
+    </notice>
+    <notice>
+        <name>OkHttp</name>
+        <url>https://github.com/square/okhttp</url>
+        <copyright>Copyright 2019 Square, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Okio</name>
+        <url>https://github.com/square/okio</url>
+        <copyright>Copyright 2013 Square, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>desugar_jdk_libs</name>
+        <url>https://github.com/google/desugar_jdk_libs</url>
+        <copyright>Copyright The Android Open Source Project; includes parts derived from OpenJDK (GPL v2 with Classpath Exception) and ThreeTen-Backport (BSD 3-Clause)</copyright>
+        <license>Apache Software License 2.0</license>
     </notice>
 </notices>

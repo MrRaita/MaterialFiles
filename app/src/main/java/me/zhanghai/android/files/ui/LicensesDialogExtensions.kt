@@ -9,6 +9,7 @@ import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.os.Message
+import android.text.TextUtils
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -41,24 +42,24 @@ private fun createHtml(notices: Notices, context: Context): String =
         append("</style></head><body><ul>")
         for (notice in notices.notices) {
             append("<li><div>")
-            append(notice.name)
+            append(TextUtils.htmlEncode(notice.name))
             val url = notice.url
             if (!url.isNullOrEmpty()) {
                 append(" (<a href=\"")
-                append(url)
+                append(TextUtils.htmlEncode(url))
                 append("\" target=\"_blank\">")
-                append(url)
+                append(TextUtils.htmlEncode(url))
                 append("</a>)")
             }
             append("</div><pre>")
             val copyright = notice.copyright
             if (!copyright.isNullOrEmpty()) {
-                append(copyright)
+                append(TextUtils.htmlEncode(copyright))
                 append("<br><br>")
             }
             val license = notice.license
             if (license != null) {
-                append(license.getSummaryText(context))
+                append(TextUtils.htmlEncode(license.getSummaryText(context)))
             }
             append("</pre></li>")
         }
