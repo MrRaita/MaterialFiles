@@ -35,12 +35,6 @@
         <license>Apache Software License 2.0</license>
     </notice>
 
-    <notice>
-        <name>Stetho</name>
-        <url>https://github.com/facebook/stetho</url>
-        <copyright>Copyright 2015 Facebook Inc.</copyright>
-        <license>BSD 3-Clause License</license>
-    </notice>
 
     <notice>
         <name>dav4jvm</name>
@@ -84,12 +78,6 @@
         <license>Apache Software License 2.0</license>
     </notice>
 
-    <notice>
-        <name>ThreeTenABP</name>
-        <url>https://github.com/JakeWharton/ThreeTenABP</url>
-        <copyright>Copyright 2015 Jake Wharton</copyright>
-        <license>Apache Software License 2.0</license>
-    </notice>
 
     <notice>
         <name>Floating Action Button Speed Dial</name>
@@ -218,7 +206,7 @@
     </notice>
 
     <notice>
-        <name>AndroidRetroFile</name>
+        <name>AndroidRetroFile (GPL 2.0 with Classpath Exception)</name>
         <url>https://github.com/zhanghai/AndroidRetroFile</url>
         <copyright>Copyright 2018 Hai Zhang</copyright>
         <license>GNU General Public License 2.0</license>
@@ -243,5 +231,159 @@
         <url>https://mina.apache.org/ftpserver-project/index.html</url>
         <copyright>Copyright 2003 The Apache Software Foundation</copyright>
         <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Material Files (modifications in this fork)</name>
+        <url>https://github.com/MrRaita/MaterialFiles</url>
+        <copyright>Copyright 2026 MrRaita (modifications to the original work)</copyright>
+        <license>GNU General Public License 3.0</license>
+    </notice>
+
+    <notice>
+        <name>sora-editor</name>
+        <url>https://github.com/Rosemoe/sora-editor</url>
+        <copyright>Copyright 2020-2026 Rosemoe</copyright>
+        <license>GNU Lesser General Public License 2.1</license>
+    </notice>
+
+    <notice>
+        <name>Gson</name>
+        <url>https://github.com/google/gson</url>
+        <copyright>Copyright Google Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>SnakeYAML Engine</name>
+        <url>https://bitbucket.org/snakeyaml/snakeyaml-engine</url>
+        <copyright>Copyright SnakeYAML Engine contributors</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Joni</name>
+        <url>https://github.com/jruby/joni</url>
+        <copyright>Copyright JRuby Team and contributors</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>JCodings</name>
+        <url>https://github.com/jruby/jcodings</url>
+        <copyright>Copyright JRuby Team and contributors</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>smali / baksmali / dexlib2</name>
+        <url>https://github.com/google/smali</url>
+        <copyright>Copyright Ben Gruver (JesusFreke) and contributors</copyright>
+        <license>BSD 3-Clause License</license>
+    </notice>
+
+    <notice>
+        <name>sshj</name>
+        <url>https://github.com/hierynomus/sshj</url>
+        <copyright>Copyright sshj contributors</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Bouncy Castle</name>
+        <url>https://www.bouncycastle.org/</url>
+        <copyright>Copyright The Legion of the Bouncy Castle Inc.</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>Apache MINA</name>
+        <url>https://mina.apache.org/</url>
+        <copyright>Copyright The Apache Software Foundation</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>Guava</name>
+        <url>https://github.com/google/guava</url>
+        <copyright>Copyright The Guava Authors</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>SLF4J Android</name>
+        <url>https://www.slf4j.org/</url>
+        <copyright>Copyright QOS.ch</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>AndroidX, Material Components, Kotlin</name>
+        <url>https://developer.android.com/jetpack/androidx</url>
+        <copyright>Copyright The Android Open Source Project, Google LLC, JetBrains s.r.o.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>JetBrains Mono (font)</name>
+        <url>https://github.com/JetBrains/JetBrainsMono</url>
+        <copyright>Copyright 2020 The JetBrains Mono Project Authors</copyright>
+        <license>SIL Open Font License 1.1</license>
+    </notice>
+
+    <notice>
+        <name>Fira Code (font)</name>
+        <url>https://github.com/tonsky/FiraCode</url>
+        <copyright>Copyright 2014-2021 The Fira Code Project Authors</copyright>
+        <license>SIL Open Font License 1.1</license>
+    </notice>
+
+    <notice>
+        <name>Source Code Pro (font)</name>
+        <url>https://github.com/adobe-fonts/source-code-pro</url>
+        <copyright>Copyright 2023 Adobe, with Reserved Font Name 'Source'</copyright>
+        <license>SIL Open Font License 1.1</license>
+    </notice>
+
+    <notice>
+        <name>Cascadia Code (font)</name>
+        <url>https://github.com/microsoft/cascadia-code</url>
+        <copyright>Copyright Microsoft Corporation, with Reserved Font Name 'Cascadia Code'</copyright>
+        <license>SIL Open Font License 1.1</license>
+    </notice>
+
+    <notice>
+        <name>language-java TextMate grammar</name>
+        <url>https://github.com/atom/language-java</url>
+        <copyright>Copyright 2014 GitHub Inc.</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>TypeScript-TmLanguage (JavaScript grammar)</name>
+        <url>https://github.com/microsoft/TypeScript-TmLanguage</url>
+        <copyright>Copyright Microsoft Corporation</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>MagicPython (Python grammar)</name>
+        <url>https://github.com/MagicStack/MagicPython</url>
+        <copyright>Copyright 2015-present MagicStack Inc.</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>vscode-markdown-tm-grammar (Markdown grammar)</name>
+        <url>https://github.com/microsoft/vscode-markdown-tm-grammar</url>
+        <copyright>Copyright Microsoft 2018</copyright>
+        <license>MIT License</license>
+    </notice>
+
+    <notice>
+        <name>lua.tmbundle (Lua grammar)</name>
+        <url>https://github.com/sumneko/lua.tmbundle</url>
+        <copyright>Copyright 2022 最萌小汐</copyright>
+        <license>MIT License</license>
     </notice>
 </notices>

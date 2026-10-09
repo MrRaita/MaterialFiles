@@ -66,6 +66,13 @@ Thank you if you choose to include Material Files in your custom ROM! However si
 
 ## License
 
+This repository is a **modified version** of [Material Files](https://github.com/zhanghai/MaterialFiles) by Hai Zhang.
+Original work: Copyright (C) 2018 Hai Zhang. Modifications: Copyright (C) 2026 MrRaita.
+Third-party components (libraries, fonts, grammars) and their licenses are listed in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and in the [LICENSES](LICENSES) folder.
+The app contains no analytics or tracking.
+
+
     Copyright (C) 2018 Hai Zhang
 
     This program is free software: you can redistribute it and/or modify
