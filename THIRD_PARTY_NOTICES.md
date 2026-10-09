@@ -54,7 +54,7 @@ Adobe; "Cascadia Code" of the Microsoft group of companies.
 | Python | https://github.com/MagicStack/MagicPython | MIT, Copyright (c) 2015-present MagicStack Inc. |
 | Markdown | https://github.com/microsoft/vscode-markdown-tm-grammar | MIT, Copyright (c) Microsoft 2018 |
 | Lua | https://github.com/sumneko/lua.tmbundle | MIT, Copyright (c) 2022 最萌小汐 |
-| HTML | https://github.com/textmate/html.tmbundle | TextMate bundle permission notice (see `app/src/main/assets/textmate/LICENSES/`) |
+| HTML | https://github.com/textmate/html.tmbundle | TextMate bundle permissive notice (see the upstream repository; license text pending verification) |
 
 The remaining grammars (CSS, Gradle, JSON, properties, shell, smali, SQL, TOML, XML) are simple
 originals written for this project and fall under the project's GPL-3.0-or-later license.

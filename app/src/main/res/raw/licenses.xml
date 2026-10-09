@@ -327,29 +327,25 @@
     <notice>
         <name>JetBrains Mono (font)</name>
         <url>https://github.com/JetBrains/JetBrainsMono</url>
-        <copyright>Copyright 2020 The JetBrains Mono Project Authors</copyright>
-        <license>SIL Open Font License 1.1</license>
+        <copyright>Copyright 2020 The JetBrains Mono Project Authors. Licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). The font files are bundled unmodified; the full license text is in the app assets and in the project repository.</copyright>
     </notice>
 
     <notice>
         <name>Fira Code (font)</name>
         <url>https://github.com/tonsky/FiraCode</url>
-        <copyright>Copyright 2014-2021 The Fira Code Project Authors</copyright>
-        <license>SIL Open Font License 1.1</license>
+        <copyright>Copyright 2014-2021 The Fira Code Project Authors. Licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). The font files are bundled unmodified; the full license text is in the app assets and in the project repository.</copyright>
     </notice>
 
     <notice>
         <name>Source Code Pro (font)</name>
         <url>https://github.com/adobe-fonts/source-code-pro</url>
-        <copyright>Copyright 2023 Adobe, with Reserved Font Name 'Source'</copyright>
-        <license>SIL Open Font License 1.1</license>
+        <copyright>Copyright 2023 Adobe, with Reserved Font Name 'Source'. Licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). The font files are bundled unmodified; the full license text is in the app assets and in the project repository.</copyright>
     </notice>
 
     <notice>
         <name>Cascadia Code (font)</name>
         <url>https://github.com/microsoft/cascadia-code</url>
-        <copyright>Copyright Microsoft Corporation, with Reserved Font Name 'Cascadia Code'</copyright>
-        <license>SIL Open Font License 1.1</license>
+        <copyright>Copyright Microsoft Corporation, with Reserved Font Name 'Cascadia Code'. Licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). The font files are bundled unmodified; the full license text is in the app assets and in the project repository.</copyright>
     </notice>
 
     <notice>

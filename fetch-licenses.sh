@@ -22,7 +22,6 @@ get https://raw.githubusercontent.com/microsoft/TypeScript-TmLanguage/master/LIC
 get https://raw.githubusercontent.com/MagicStack/MagicPython/master/LICENSE                      $T/MagicPython-MIT.txt
 get https://raw.githubusercontent.com/microsoft/vscode-markdown-tm-grammar/main/LICENSE.txt      $T/vscode-markdown-tm-grammar-MIT.txt
 get https://raw.githubusercontent.com/sumneko/lua.tmbundle/master/LICENSE                        $T/lua.tmbundle-MIT.txt
-get https://raw.githubusercontent.com/textmate/html.tmbundle/master/README.md                    $T/html.tmbundle-README.txt
 get https://raw.githubusercontent.com/zhanghai/AndroidRetroFile/master/LICENSE                   LICENSES/AndroidRetroFile-GPL-2.0-with-Classpath-Exception.txt
 echo
 [ $FAIL = 0 ] && echo "Hepsi indirildi." || echo "Bazı dosyalar inmedi; ağ/URL kontrol edip tekrar çalıştır."
