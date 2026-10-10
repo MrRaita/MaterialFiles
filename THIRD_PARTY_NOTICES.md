@@ -5,9 +5,9 @@ by Hai Zhang, distributed under the **GNU General Public License, version 3 or (
 version** (see [`LICENSE`](LICENSE)).
 
 - Original work: Copyright (C) 2018 Hai Zhang.
-- Modifications in this fork (integrated code/text editor, PDF and image viewers, JSON/XML compare, root-access changes, CI): Copyright (C) 2026 MrRaita, released under the same GPL-3.0-or-later terms.
+- Modifications in this fork (integrated code/text editor, PDF and image viewers, JSON/XML compare, CI): Copyright (C) 2026 MrRaita, released under the same GPL-3.0-or-later terms.
 
-The app itself is free software. It contains **no analytics, tracking or crash-reporting services**.
+The app itself is free software. It contains **no analytics or tracking services**.
 
 Full license texts are in [`LICENSES/`](LICENSES/). The list shown inside the app
 (About → Open source licenses) is generated from `app/src/main/res/raw/licenses.xml`.
