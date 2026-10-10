@@ -5,7 +5,8 @@ by Hai Zhang, distributed under the **GNU General Public License, version 3 or (
 version** (see [`LICENSE`](LICENSE)).
 
 - Original work: Copyright (C) 2018 Hai Zhang.
-- Modifications in this fork (integrated code/text editor, PDF and image viewers, JSON/XML compare,
+  - Modifications in this fork (integrated code/text editor, PDF and image viewers, JSON/XML compare,
+  root-access changes, CI): Copyright (C) 2026 MrRaita, released under the same GPL-3.0-or-later terms.
   root-access changes, removal of Firebase/analytics, CI): Copyright (C) 2026 MrRaita, released under the same GPL-3.0-or-later terms.
 
 The app itself is free software. It contains **no analytics, tracking or crash-reporting services**.
