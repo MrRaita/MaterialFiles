@@ -121,7 +121,7 @@ object BinaryTextDecoder {
         val parser = ChunkReader(bytes)
         val out = StringBuilder()
         out.append("# Android resource table (resources.arsc)\n")
-        out.append("# Binary resource data decoded by Material Files\n\n")
+        out.append("# Binary resource data decoded by Kanrimate Files\n\n")
         if (parser.readU16(0) != CHUNK_TABLE) return out.append("# Geçersiz ARSC başlığı.").toString()
         val packageCount = parser.readI32(8)
         out.append("package_count = ").append(packageCount).append("\n")
@@ -153,7 +153,7 @@ object BinaryTextDecoder {
 
     private fun decodeBinaryXml(bytes: ByteArray): String {
         val strings = StringPool.findFirst(bytes)
-            ?: return "<!-- Material Files: binary XML string pool çözümlenemedi. -->"
+            ?: return "<!-- Kanrimate Files: binary XML string pool çözümlenemedi. -->"
         val out = StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
         val namespaces = mutableMapOf<Int, String>()
         val parser = ChunkReader(bytes)

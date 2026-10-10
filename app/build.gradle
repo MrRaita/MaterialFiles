@@ -15,7 +15,7 @@ android {
     compileSdkMinor = 2
     ndkVersion '30.0.16248370'
     defaultConfig {
-        applicationId 'me.zhanghai.android.files'
+        applicationId 'com.mrraita.kanrimate'
         minSdk 23
         // Not supporting the ACCESS_LOCAL_NETWORK runtime permission yet.
         //noinspection OldTargetApi

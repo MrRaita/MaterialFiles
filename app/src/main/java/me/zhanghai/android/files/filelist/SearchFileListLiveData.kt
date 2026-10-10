@@ -5,7 +5,7 @@
 
 package me.zhanghai.android.files.filelist
 
-import android.os.AsyncTask
+import me.zhanghai.android.files.util.AppExecutors
 import java8.nio.file.Path
 import me.zhanghai.android.files.file.FileItem
 import me.zhanghai.android.files.file.loadFileItem
@@ -33,7 +33,7 @@ class SearchFileListLiveData(
     fun loadValue() {
         future?.cancel(true)
         value = Loading(emptyList())
-        future = (AsyncTask.THREAD_POOL_EXECUTOR as ExecutorService).submit<Unit> {
+        future = AppExecutors.io.submit<Unit> {
             val fileList = mutableListOf<FileItem>()
             try {
                 path.search(query, INTERVAL_MILLIS) { paths: List<Path> ->

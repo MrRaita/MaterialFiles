@@ -1,10 +1,10 @@
-# Material Files (MrRaita fork)
+# Kanrimate Files
 
-A modified version of [Material Files](https://github.com/zhanghai/MaterialFiles) by Hai Zhang — an open source,
+Kanrimate Files is a modified version (fork) of [Material Files](https://github.com/zhanghai/MaterialFiles) by Hai Zhang — an open source,
 Material Design file manager for Android. This fork is **not** the original app and is **not** affiliated with,
 endorsed by, or published by the original author. It is not available on Google Play or F-Droid.
 
-> The app is going to be renamed and get its own package name, so it can be installed alongside the original.
+> Package name: `com.mrraita.kanrimate`. It has its own identity, so it installs alongside the original app and does not replace or update it.
 
 ## What this fork adds
 
@@ -45,7 +45,7 @@ later version** — see [LICENSE](LICENSE).
   license texts are in the [LICENSES](LICENSES) folder.
 - The complete corresponding source code of every build is this repository.
 
-Material Files is the name of the original project; no endorsement by its author is implied.
+"Material Files" is the name of the original project; no endorsement by its author is implied.
 
     Copyright (C) 2018 Hai Zhang
     Copyright (C) 2026 MrRaita

@@ -82,14 +82,14 @@ jobs:
         run: |
           mkdir -p release-artifacts
           APK=$(ls app/build/outputs/apk/release/*.apk | head -n1)
-          cp "$APK" "release-artifacts/MaterialFiles-${{ steps.version.outputs.version_name }}.apk"
+          cp "$APK" "release-artifacts/Kanrimate-${{ steps.version.outputs.version_name }}.apk"
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version_name }}
           target_commitish: ${{ github.sha }}
-          name: "MaterialFiles ${{ steps.version.outputs.version_name }}"
+          name: "Kanrimate Files ${{ steps.version.outputs.version_name }}"
           body: |
             Kararlı sürüm: ${{ steps.version.outputs.version_name }} (${{ steps.version.outputs.version_code }})
             Commit: ${{ github.sha }}

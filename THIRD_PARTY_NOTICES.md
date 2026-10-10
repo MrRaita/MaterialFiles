@@ -1,6 +1,6 @@
 # Third-party notices
 
-This project is a **modified version** of [Material Files](https://github.com/zhanghai/MaterialFiles)
+Kanrimate Files is a **modified version** of [Material Files](https://github.com/zhanghai/MaterialFiles)
 by Hai Zhang, distributed under the **GNU General Public License, version 3 or (at your option) any later
 version** (see [`LICENSE`](LICENSE)).
 

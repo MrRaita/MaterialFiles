@@ -25,7 +25,7 @@ import me.zhanghai.android.files.app.AppActivity
 
 class PdfViewerActivity : AppActivity() {
     private lateinit var binding: PdfViewerFragmentBinding
-    // Only set when opened from within Material Files itself (extraPath); null when opened
+    // Only set when opened from within Kanrimate Files itself (extraPath); null when opened
     // externally via "Open with" / a VIEW intent from another app, in which case we only have
     // the raw content:// (or file://) Uri handed to us and no internal Path at all.
     private var path: Path? = null

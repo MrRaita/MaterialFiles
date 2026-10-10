@@ -65,7 +65,7 @@ object EditorThemeFactory {
 
     fun themeModel(name: String, palette: Palette): ThemeModel {
         val root = JSONObject()
-            .put("name", "Material Files $name")
+            .put("name", "Kanrimate $name")
         val settings = JSONArray()
         settings.put(JSONObject().put("settings", JSONObject()
             .put("background", palette.background)

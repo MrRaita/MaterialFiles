@@ -7,7 +7,7 @@
 
 <resources>
 
-    <string name="app_name">Material Files</string>
+    <string name="app_name">Kanrimate Files</string>
 
     <string name="close">Close</string>
     <string name="copy">Copy</string>
@@ -894,7 +894,7 @@
 
     <string name="shortcut_downloads_title" translatable="false">@string/navigation_standard_directory_downloads</string>
     <string name="shortcut_ftp_server_title" translatable="false">@string/ftp_server_title</string>
-<string name="pdf_viewer_title">Material Files PDF Viewer</string>
+<string name="pdf_viewer_title">Kanrimate Files PDF Viewer</string>
 <string name="pdf_viewer_page_count">%1$d pages</string>
 <string name="pdf_viewer_untitled">PDF document</string>
     <string name="pdf_viewer_go_to_page">Go to page</string>

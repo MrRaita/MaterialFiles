@@ -5,7 +5,7 @@
 
 package me.zhanghai.android.files.app
 
-import android.os.AsyncTask
+import me.zhanghai.android.files.util.AppExecutors
 import android.os.Build
 import android.webkit.WebView
 import jcifs.context.SingletonContext
@@ -55,7 +55,7 @@ private fun initializeFileSystemProviders() {
     FileSystemProviders.install()
     FileSystemProviders.overflowWatchEvents = true
     // SingletonContext.init() calls NameServiceClientImpl.initCache() which connects to network.
-    AsyncTask.THREAD_POOL_EXECUTOR.execute {
+    AppExecutors.io.execute {
         SingletonContext.init(
             Properties().apply {
                 setProperty("jcifs.netbios.cachePolicy", "0")

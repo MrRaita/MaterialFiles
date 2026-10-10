@@ -5,7 +5,7 @@
 
 package me.zhanghai.android.files.filelist
 
-import android.os.AsyncTask
+import me.zhanghai.android.files.util.AppExecutors
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.MainThread
@@ -23,7 +23,7 @@ class PathObserver(path: Path, @MainThread onChange: () -> Unit) : Closeable {
     private val lock = Any()
 
     init {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute {
+        AppExecutors.io.execute {
             synchronized(lock) {
                 if (closed) {
                     return@execute
@@ -46,7 +46,7 @@ class PathObserver(path: Path, @MainThread onChange: () -> Unit) : Closeable {
     }
 
     override fun close() {
-        AsyncTask.THREAD_POOL_EXECUTOR.execute {
+        AppExecutors.io.execute {
             synchronized(lock) {
                 if (closed) {
                     return@execute

@@ -7,7 +7,7 @@
 
 <resources>
 
-    <string name="app_name">Materyal Dosyalar</string>
+    <string name="app_name">Kanrimate Files</string>
 
     <string name="close">Kapat</string>
     <string name="copy">Kopyala</string>
@@ -638,7 +638,7 @@
     <string name="about_author_name_title">Hai Zhang</string>
     <string name="about_author_github_title">GitHub\'da takip edin</string>
     <string name="about_author_twitter_title">Twitter\'da takip edin</string>
-<string name="pdf_viewer_title">Material Files PDF Görüntüleyici</string>
+<string name="pdf_viewer_title">Kanrimate Files PDF Görüntüleyici</string>
 <string name="pdf_viewer_page_count">%1$d sayfa</string>
 <string name="pdf_viewer_untitled">PDF belgesi</string>
     <string name="pdf_viewer_go_to_page">Sayfaya git</string>

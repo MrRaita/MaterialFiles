@@ -100,11 +100,11 @@ jobs:
         run: |
           mkdir -p release-artifacts
           APK=$(ls app/build/outputs/apk/release/*.apk | head -n1)
-          cp "$APK" "release-artifacts/MaterialFiles-${{ steps.version.outputs.version_name }}.apk"
+          cp "$APK" "release-artifacts/Kanrimate-${{ steps.version.outputs.version_name }}.apk"
 
       - name: Upload APK as workflow artifact
         uses: actions/upload-artifact@v7
         with:
-          name: MaterialFiles-${{ steps.version.outputs.version_name }}
+          name: Kanrimate-${{ steps.version.outputs.version_name }}
           path: release-artifacts/*.apk
           retention-days: 14

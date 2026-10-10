@@ -2,8 +2,11 @@
 
 ## Supported Versions
 
-Only the latest version of this app is currently being supported with security updates.
+Only the latest release is supported with security updates.
 
 ## Reporting a Vulnerability
 
-Please email dreaming.in.code.zh@gmail.com to report a vulnerability.
+Please report vulnerabilities privately through GitHub:
+**Security -> Report a vulnerability** on this repository.
+
+Do not open a public issue for security problems.

@@ -64,7 +64,7 @@
             android:name="me.zhanghai.android.files.viewer.pdf.PdfViewerActivity"
             android:exported="true"
             android:label="@string/pdf_viewer_title">
-            <!-- Lets other apps' "Open with" / "view" system chooser offer Material Files'
+            <!-- Lets other apps' "Open with" / "view" system chooser offer Kanrimate Files'
                  own PDF viewer, not just our internal extraPath launches. The explicit label
                  above is required: without it, Android falls back to the bare app name with no
                  subtitle, making this entry look identical to (and easily confused with) the
