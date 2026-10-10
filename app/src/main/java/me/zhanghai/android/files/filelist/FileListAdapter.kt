@@ -132,6 +132,22 @@ class FileListAdapter(
         listener.selectFiles(files, true)
     }
 
+    /** Selects every selectable file that is not currently selected and deselects the rest. */
+    fun invertSelection(currentSelection: FileItemSet) {
+        val previous = fileItemSetOf().apply { addAll(currentSelection) }
+        val inverted = fileItemSetOf()
+        for (index in 0..<itemCount) {
+            val file = getItem(index)
+            if (isFileSelectable(file) && file !in previous) {
+                inverted.add(file)
+            }
+        }
+        if (inverted.isNotEmpty()) {
+            listener.selectFiles(inverted, true)
+        }
+        listener.selectFiles(previous, false)
+    }
+
     private fun isFileSelectable(file: FileItem): Boolean {
         val pickOptions = pickOptions ?: return true
         return when (pickOptions.mode) {

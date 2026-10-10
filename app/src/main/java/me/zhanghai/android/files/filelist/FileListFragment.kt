@@ -82,6 +82,7 @@ import me.zhanghai.android.files.navigation.NavigationRootMapLiveData
 import me.zhanghai.android.files.provider.archive.createArchiveRootPath
 import me.zhanghai.android.files.provider.archive.isArchivePath
 import me.zhanghai.android.files.provider.linux.isLinuxPath
+import me.zhanghai.android.files.settings.SelectionActions
 import me.zhanghai.android.files.settings.Settings
 import me.zhanghai.android.files.terminal.Terminal
 import me.zhanghai.android.files.ui.AppBarLayoutExpandHackListener
@@ -896,6 +897,9 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
             menu.findItem(R.id.action_extract).isVisible = areAllFilesArchiveFiles
             val isCurrentPathReadOnly = viewModel.currentPath.fileSystem.isReadOnly
             menu.findItem(R.id.action_archive).isVisible = !isCurrentPathReadOnly
+            applySelectionActionsLayout(
+                menu, !isAnyFileReadOnly, areAllFilesArchiveFiles, !isCurrentPathReadOnly
+            )
         }
         if (!overlayActionMode.isActive) {
             binding.appBarLayout.setExpanded(true)
@@ -912,6 +916,85 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
                     onOverlayActionModeFinished()
                 }
             })
+        }
+    }
+
+    /**
+     * Rebuilds the selection menu according to the user's "File selection actions" setting: each action
+     * is shown in the toolbar, in the overflow (⋮) menu, or hidden, in the chosen order.
+     */
+    private fun applySelectionActionsLayout(
+        menu: Menu,
+        canModify: Boolean,
+        canExtract: Boolean,
+        canArchive: Boolean
+    ) {
+        val copyItem = menu.findItem(R.id.action_copy)
+        val copyTitle = copyItem?.title
+        val copyIcon = copyItem?.icon
+        val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+        menu.clear()
+        SelectionActions.load(prefs).forEachIndexed { index, entry ->
+            val itemId: Int
+            val title: CharSequence
+            val icon: android.graphics.drawable.Drawable?
+            val visible: Boolean
+            fun drawable(res: Int) = androidx.appcompat.content.res.AppCompatResources.getDrawable(
+                requireContext(), res
+            )
+            when (entry.id) {
+                "cut" -> {
+                    itemId = R.id.action_cut; title = getString(R.string.cut)
+                    icon = drawable(R.drawable.cut_icon_control_normal_24dp); visible = canModify
+                }
+                "copy" -> {
+                    itemId = R.id.action_copy; title = copyTitle ?: getString(R.string.copy)
+                    icon = copyIcon ?: drawable(R.drawable.copy_icon_control_normal_24dp)
+                    visible = true
+                }
+                "delete" -> {
+                    itemId = R.id.action_delete; title = getString(R.string.delete)
+                    icon = drawable(R.drawable.delete_icon_control_normal_24dp); visible = canModify
+                }
+                "extract" -> {
+                    itemId = R.id.action_extract
+                    title = getString(R.string.file_list_select_action_extract)
+                    icon = drawable(R.drawable.extract_icon_control_normal_24dp); visible = canExtract
+                }
+                "archive" -> {
+                    itemId = R.id.action_archive
+                    title = getString(R.string.file_list_select_action_archive)
+                    icon = drawable(R.drawable.selection_archive_icon_24dp); visible = canArchive
+                }
+                "share" -> {
+                    itemId = R.id.action_share; title = getString(R.string.share)
+                    icon = drawable(R.drawable.share_icon_control_normal_24dp); visible = true
+                }
+                "select_all" -> {
+                    itemId = R.id.action_select_all; title = getString(R.string.select_all)
+                    icon = drawable(R.drawable.google_select_all_24dp); visible = true
+                }
+                "select_inverse" -> {
+                    itemId = R.id.action_select_inverse
+                    title = getString(R.string.file_list_select_action_invert)
+                    icon = drawable(R.drawable.selection_invert_icon_24dp); visible = true
+                }
+                "copy_path" -> {
+                    itemId = R.id.action_copy_path
+                    title = getString(R.string.file_list_action_copy_path)
+                    icon = drawable(R.drawable.selection_copy_path_icon_24dp); visible = true
+                }
+                else -> return@forEachIndexed
+            }
+            if (entry.placement == SelectionActions.Placement.HIDDEN) return@forEachIndexed
+            val menuItem = menu.add(Menu.NONE, itemId, index, title)
+            if (entry.placement == SelectionActions.Placement.TOOLBAR) {
+                menuItem.setIcon(icon)
+                menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            } else {
+                menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            }
+            menuItem.isVisible = visible
         }
     }
 
@@ -951,6 +1034,15 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
             }
             R.id.action_select_all -> {
                 selectAllFiles()
+                true
+            }
+            R.id.action_select_inverse -> {
+                adapter.invertSelection(viewModel.selectedFiles)
+                true
+            }
+            R.id.action_copy_path -> {
+                val paths = viewModel.selectedFiles.map { it.path.toUserFriendlyString() }
+                clipboardManager.copyText(paths.joinToString("\n"), requireContext())
                 true
             }
             else -> false

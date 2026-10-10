@@ -637,14 +637,7 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         scheme.setColor(EditorColorScheme.LINE_NUMBER, parseColor(preferences.getString(prefKey("key_editor_color_gutter_text"), ""), Color.parseColor(palette.comment)))
         scheme.setColor(EditorColorScheme.LINE_NUMBER_CURRENT, parseColor(preferences.getString(prefKey("key_editor_color_gutter_text"), ""), Color.parseColor(palette.keyword)))
         scheme.setColor(EditorColorScheme.SELECTION_INSERT, parseColor(preferences.getString(prefKey("key_editor_color_cursor"), ""), Color.parseColor(palette.foreground)))
-        val toolbarBackground = parseColor(preferences.getString(prefKey("key_editor_toolbar_background"), ""), Color.parseColor(palette.background))
-        val toolbarIcon = parseColor(preferences.getString(prefKey("key_editor_toolbar_icon"), ""), Color.parseColor(palette.foreground))
-        binding.editorToolbar.root.setBackgroundColor(toolbarBackground)
-        binding.editorToolbar.toolbarActions.children.forEach {
-            (it as? android.widget.ImageButton)?.imageTintList = android.content.res.ColorStateList.valueOf(toolbarIcon)
-        }
-        binding.editorToolbar.symbolsToggle.imageTintList = android.content.res.ColorStateList.valueOf(toolbarIcon)
-        binding.editorToolbar.symbolRow.setBackgroundColor(toolbarBackground)
+        applyToolbarColors()
                 binding.textEdit.setBackgroundColor(parseColor(preferences.getString(prefKey("key_editor_color_background"), palette.background), Color.parseColor(palette.background)))
         binding.textEdit.typefaceText = createEditorTypeface(
             preferences.getString(prefKey(PREF_FONT_FAMILY), if (isPlainTextMode) "sans-serif" else "monospace") ?: "monospace",
@@ -972,6 +965,35 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
         ToolbarAction("find_replace", R.string.text_editor_search, R.drawable.google_find_replace_24dp) { showSearchDialog() }
     )
 
+    /**
+     * Colors the editor toolbar (action icons, symbol toggle and symbol keys) from the selected editor
+     * theme. Unless the user set an explicit icon color, the icon/text color is the theme's foreground,
+     * falling back to black or white whenever that would not contrast enough with the toolbar background.
+     */
+    private fun applyToolbarColors() {
+        if (!this::binding.isInitialized) return
+        val themeName = preferences.getString(prefKey(PREF_EDITOR_THEME), "github_dark") ?: "github_dark"
+        val palette = EditorThemeFactory.palette(themeName)
+        val toolbarBackground = parseColor(preferences.getString(prefKey("key_editor_toolbar_background"), ""), Color.parseColor(palette.background))
+        val explicitIcon = preferences.getString(prefKey("key_editor_toolbar_icon"), "")
+        val themeForeground = Color.parseColor(palette.foreground)
+        val toolbarIcon = if (!explicitIcon.isNullOrBlank()) {
+            parseColor(explicitIcon, themeForeground)
+        } else if (androidx.core.graphics.ColorUtils.calculateContrast(themeForeground, toolbarBackground) >= 4.5) {
+            themeForeground
+        } else if (androidx.core.graphics.ColorUtils.calculateLuminance(toolbarBackground) > 0.5) {
+            Color.BLACK
+        } else {
+            Color.WHITE
+        }
+        val tint = android.content.res.ColorStateList.valueOf(toolbarIcon)
+        binding.editorToolbar.root.setBackgroundColor(toolbarBackground)
+        binding.editorToolbar.symbolRow.setBackgroundColor(toolbarBackground)
+        binding.editorToolbar.toolbarActions.children.forEach { (it as? android.widget.ImageButton)?.imageTintList = tint }
+        binding.editorToolbar.symbolsToggle.imageTintList = tint
+        binding.editorToolbar.symbolContainer.children.forEach { (it as? android.widget.TextView)?.setTextColor(toolbarIcon) }
+    }
+
     private fun buildToolbarActions() {
         binding.editorToolbar.toolbarActions.removeAllViews()
         val actions = toolbarActions().associateBy { it.id }
@@ -989,6 +1011,7 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             }
             binding.editorToolbar.toolbarActions.addView(button)
         }
+        applyToolbarColors()
     }
 
     private fun updateToolbarActions() {
@@ -1028,6 +1051,7 @@ class TextEditorFragment : Fragment(), ConfirmReloadDialogFragment.Listener,
             }
             binding.editorToolbar.symbolContainer.addView(text)
         }
+        applyToolbarColors()
     }
 
     private fun resolveThemeTextColor(attr: Int): android.content.res.ColorStateList {

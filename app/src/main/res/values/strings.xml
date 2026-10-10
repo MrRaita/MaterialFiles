@@ -969,4 +969,11 @@
         <item>normal</item><item>medium</item><item>bold</item>
     </string-array>
     <string name="settings_editor_color_theme_default">Theme default</string>
+    <string name="settings_selection_actions_title">File selection actions</string>
+    <string name="settings_selection_actions_summary">Choose which actions appear in the toolbar or the ⋮ menu when files are selected, and their order</string>
+    <string name="settings_selection_actions_toolbar">Toolbar</string>
+    <string name="settings_selection_actions_menu">⋮ menu</string>
+    <string name="settings_selection_actions_hidden">Hidden</string>
+    <string name="settings_selection_actions_reset">Reset to defaults</string>
+    <string name="file_list_select_action_invert">Invert selection</string>
 </resources>

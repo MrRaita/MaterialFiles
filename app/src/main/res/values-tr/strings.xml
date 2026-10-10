@@ -693,4 +693,11 @@
     <string name="editor_font_weight_medium">Orta</string>
     <string name="editor_font_weight_bold">Kalın</string>
     <string name="settings_editor_color_theme_default">Tema varsayılanı</string>
+    <string name="settings_selection_actions_title">Dosya seçimi işlemleri</string>
+    <string name="settings_selection_actions_summary">Dosyalar seçildiğinde araç çubuğunda veya ⋮ menüsünde görünecek işlemleri ve sıralarını seç</string>
+    <string name="settings_selection_actions_toolbar">Araç çubuğu</string>
+    <string name="settings_selection_actions_menu">⋮ menüsü</string>
+    <string name="settings_selection_actions_hidden">Gizli</string>
+    <string name="settings_selection_actions_reset">Varsayılana sıfırla</string>
+    <string name="file_list_select_action_invert">Seçimi ters çevir</string>
 </resources>
