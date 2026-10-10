@@ -700,4 +700,9 @@
     <string name="settings_selection_actions_hidden">Gizli</string>
     <string name="settings_selection_actions_reset">Varsayılana sıfırla</string>
     <string name="file_list_select_action_invert">Seçimi ters çevir</string>
+    <string name="settings_selection_actions_hide">Gizle</string>
+    <string name="settings_selection_actions_move_to_toolbar">Araç çubuğuna taşı</string>
+    <string name="settings_selection_actions_move_to_menu">⋮ menüsüne taşı</string>
+    <string name="settings_selection_actions_hint_toolbar">Dosyalar seçilince düğme olarak görünür. Sıralamak için sürükle, ⇄ ile ⋮ menüsüne taşı, ✕ ile gizle.</string>
+    <string name="settings_selection_actions_hint_menu">⋮ menüsünün içinde görünür. Sıralamak için sürükle, ⇄ ile araç çubuğuna taşı, ✕ ile gizle.</string>
 </resources>

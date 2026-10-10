@@ -898,7 +898,8 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
             val isCurrentPathReadOnly = viewModel.currentPath.fileSystem.isReadOnly
             menu.findItem(R.id.action_archive).isVisible = !isCurrentPathReadOnly
             applySelectionActionsLayout(
-                menu, !isAnyFileReadOnly, areAllFilesArchiveFiles, !isCurrentPathReadOnly
+                menu, !isAnyFileReadOnly, areAllFilesArchiveFiles, !isCurrentPathReadOnly,
+                areAllFilesArchivePaths
             )
         }
         if (!overlayActionMode.isActive) {
@@ -927,69 +928,64 @@ class FileListFragment : Fragment(), BreadcrumbLayout.Listener, FileListAdapter.
         menu: Menu,
         canModify: Boolean,
         canExtract: Boolean,
-        canArchive: Boolean
+        canArchive: Boolean,
+        copyIsExtract: Boolean
     ) {
-        val copyItem = menu.findItem(R.id.action_copy)
-        val copyTitle = copyItem?.title
-        val copyIcon = copyItem?.icon
         val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
         menu.clear()
         SelectionActions.load(prefs).forEachIndexed { index, entry ->
+            if (entry.placement == SelectionActions.Placement.HIDDEN) return@forEachIndexed
             val itemId: Int
-            val title: CharSequence
-            val icon: android.graphics.drawable.Drawable?
+            val titleRes: Int
+            val iconRes: Int
             val visible: Boolean
-            fun drawable(res: Int) = androidx.appcompat.content.res.AppCompatResources.getDrawable(
-                requireContext(), res
-            )
             when (entry.id) {
                 "cut" -> {
-                    itemId = R.id.action_cut; title = getString(R.string.cut)
-                    icon = drawable(R.drawable.cut_icon_control_normal_24dp); visible = canModify
+                    itemId = R.id.action_cut; titleRes = R.string.cut
+                    iconRes = R.drawable.cut_icon_control_normal_24dp; visible = canModify
                 }
                 "copy" -> {
-                    itemId = R.id.action_copy; title = copyTitle ?: getString(R.string.copy)
-                    icon = copyIcon ?: drawable(R.drawable.copy_icon_control_normal_24dp)
+                    itemId = R.id.action_copy
+                    titleRes = if (copyIsExtract) R.string.file_list_select_action_extract else R.string.copy
+                    iconRes = if (copyIsExtract) R.drawable.extract_icon_control_normal_24dp
+                    else R.drawable.copy_icon_control_normal_24dp
                     visible = true
                 }
                 "delete" -> {
-                    itemId = R.id.action_delete; title = getString(R.string.delete)
-                    icon = drawable(R.drawable.delete_icon_control_normal_24dp); visible = canModify
+                    itemId = R.id.action_delete; titleRes = R.string.delete
+                    iconRes = R.drawable.delete_icon_control_normal_24dp; visible = canModify
                 }
                 "extract" -> {
-                    itemId = R.id.action_extract
-                    title = getString(R.string.file_list_select_action_extract)
-                    icon = drawable(R.drawable.extract_icon_control_normal_24dp); visible = canExtract
+                    itemId = R.id.action_extract; titleRes = R.string.file_list_select_action_extract
+                    iconRes = R.drawable.extract_icon_control_normal_24dp; visible = canExtract
                 }
                 "archive" -> {
-                    itemId = R.id.action_archive
-                    title = getString(R.string.file_list_select_action_archive)
-                    icon = drawable(R.drawable.selection_archive_icon_24dp); visible = canArchive
+                    itemId = R.id.action_archive; titleRes = R.string.file_list_select_action_archive
+                    iconRes = R.drawable.selection_archive_icon_24dp; visible = canArchive
                 }
                 "share" -> {
-                    itemId = R.id.action_share; title = getString(R.string.share)
-                    icon = drawable(R.drawable.share_icon_control_normal_24dp); visible = true
+                    itemId = R.id.action_share; titleRes = R.string.share
+                    iconRes = R.drawable.share_icon_control_normal_24dp; visible = true
                 }
                 "select_all" -> {
-                    itemId = R.id.action_select_all; title = getString(R.string.select_all)
-                    icon = drawable(R.drawable.google_select_all_24dp); visible = true
+                    itemId = R.id.action_select_all; titleRes = R.string.select_all
+                    iconRes = R.drawable.google_select_all_24dp; visible = true
                 }
                 "select_inverse" -> {
-                    itemId = R.id.action_select_inverse
-                    title = getString(R.string.file_list_select_action_invert)
-                    icon = drawable(R.drawable.selection_invert_icon_24dp); visible = true
+                    itemId = R.id.action_select_inverse; titleRes = R.string.file_list_select_action_invert
+                    iconRes = R.drawable.selection_invert_icon_24dp; visible = true
                 }
                 "copy_path" -> {
-                    itemId = R.id.action_copy_path
-                    title = getString(R.string.file_list_action_copy_path)
-                    icon = drawable(R.drawable.selection_copy_path_icon_24dp); visible = true
+                    itemId = R.id.action_copy_path; titleRes = R.string.file_list_action_copy_path
+                    iconRes = R.drawable.selection_copy_path_icon_24dp; visible = true
                 }
                 else -> return@forEachIndexed
             }
-            if (entry.placement == SelectionActions.Placement.HIDDEN) return@forEachIndexed
-            val menuItem = menu.add(Menu.NONE, itemId, index, title)
+            val menuItem = menu.add(Menu.NONE, itemId, index, titleRes)
             if (entry.placement == SelectionActions.Placement.TOOLBAR) {
-                menuItem.setIcon(icon)
+                // Icons are given as resource ids so that the toolbar resolves ?colorControlNormal
+                // with its own theme, exactly like icons from an inflated menu.
+                menuItem.setIcon(iconRes)
                 menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             } else {
                 menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)

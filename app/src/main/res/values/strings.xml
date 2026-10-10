@@ -976,4 +976,9 @@
     <string name="settings_selection_actions_hidden">Hidden</string>
     <string name="settings_selection_actions_reset">Reset to defaults</string>
     <string name="file_list_select_action_invert">Invert selection</string>
+    <string name="settings_selection_actions_hide">Hide</string>
+    <string name="settings_selection_actions_move_to_toolbar">Move to toolbar</string>
+    <string name="settings_selection_actions_move_to_menu">Move to ⋮ menu</string>
+    <string name="settings_selection_actions_hint_toolbar">Shown as buttons while files are selected. Drag to reorder, tap ⇄ to move an action to the ⋮ menu, ✕ to hide it.</string>
+    <string name="settings_selection_actions_hint_menu">Shown inside the ⋮ menu. Drag to reorder, tap ⇄ to move an action to the toolbar, ✕ to hide it.</string>
 </resources>
